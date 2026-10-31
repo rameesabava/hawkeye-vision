@@ -17,11 +17,7 @@ const PRODUCTS = [
     text: "Reliable cameras from leading brands.",
     img: "/products/cctv-cameras.webp",
   },
-  {
-    title: "IP Cameras",
-    text: "Network cameras for sharp, remote-ready monitoring.",
-    img: "/products/ip-cameras.jfif",
-  },
+  
   {
     title: "Security Camera Systems",
     text: "Complete systems, ready to install.",
