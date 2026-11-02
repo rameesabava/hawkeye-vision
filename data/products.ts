@@ -48,7 +48,15 @@ export const BRANDS = [
 export const BRAND_SITES: Record<string, string> = {
   Hikvision: "https://www.hikvisionindia.com",
   "CP Plus": "https://www.cpplusworld.com",
+  "TP Link": "https://www.tp-link.com/in/",
   Zebronics: "https://zebronics.com/collections/cctv",
+  Dahua: "https://www.dahuasecurity.com/in",
+  Panasonic: "https://security.in.panasonic.com/surveillance-cameras",
+  Toshiba: "https://toshiba-india.com/",
+  "Western Digital":
+    "https://www.westerndigital.com/en-in/products/internal-drives/wd-purple-sata-hdd?sku=WD11PURZ",
+  "D Link": "https://www.dlink.com/in/en",
+  "Hi Focus": "https://hifocuscctv.com/",
   eSSL: "https://www.esslsecurity.com",
 };
 
@@ -80,7 +88,7 @@ const make = (
 });
 
 /*
- * 12 products, one or more per brand. Put the images in /public/products/list/
+ * 12 products, one or more per brand. Put the images in /public/products/product-list/
  * with the same file names (or change the paths below).
  * Add a `price` to any item, e.g. price: "₹4,500".
  */
