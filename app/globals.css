@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+@theme {
+  /* Navy scale: replaces the neutral greys and blacks everywhere */
+  --color-neutral-950: #081F4D;  /* main dark sections, from the logo shield */
+  --color-neutral-900: #0F2A63;
+  --color-neutral-800: #1B3A7A;
+  --color-neutral-700: #34497A;
+  --color-neutral-600: #4A5E85;  /* secondary text on light sections */
+  --color-neutral-500: #6A7B9B;
+  --color-neutral-400: #93A2BF;
+  --color-neutral-300: #C3CEE3;
+  --color-neutral-200: #DCE4F2;  /* card placeholders, borders */
+  --color-neutral-100: #EAF0F9;
+  --color-neutral-50:  #F4F7FC;
+
+  /* Accent: the light blue from the logo's eye */
+  --color-sky: #7DB8FF;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

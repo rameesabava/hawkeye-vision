@@ -1,11 +1,9 @@
 import Link from "next/link";
+import { CCTV_SEGMENT, IT_SEGMENT } from "@/data/products";
 
-const SUPPLY = [
-  "Cameras and IP cameras",
-  "Security camera systems",
-  "DVR, NVR and XVR recorders",
-  "Access control systems",
-  "Other IoT products",
+const SEGMENTS = [
+  { title: "CCTV Segment", items: CCTV_SEGMENT },
+  { title: "IT Segment", items: IT_SEGMENT },
 ];
 
 export default function OverlapSection() {
@@ -32,25 +30,28 @@ export default function OverlapSection() {
           </p>
 
           <ul className="mt-8 divide-y divide-white/10 border-y border-white/10">
-            {SUPPLY.map((item) => (
-              <li key={item} className="py-4 text-lg">
-                {item}
+            {SEGMENTS.map((segment) => (
+              <li key={segment.title} className="py-6">
+                <h3 className="text-xl font-semibold">{segment.title}</h3>
+                <p className="mt-2 text-white/60">
+                  {segment.items.join(", ")}
+                </p>
               </li>
             ))}
           </ul>
 
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
-              href="/contact"
+              href="/products"
               className="rounded-full bg-white px-8 py-4 text-sm font-semibold text-black transition hover:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
-              Contact us
+              View products
             </Link>
             <Link
-              href="/about"
+              href="/contact"
               className="rounded-full border border-white/30 px-8 py-4 text-sm font-semibold transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
-              About us
+              Contact us
             </Link>
           </div>
         </div>

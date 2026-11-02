@@ -28,32 +28,36 @@ export default function Hero() {
   }, [active]);
 
   return (
-    <section className="relative isolate min-h-screen overflow-hidden bg-black text-white">
-      {/* Video carousel (cross-fades when a clip ends) */}
-      {VIDEOS.map((src, i) => (
-        <video
-          key={src}
-          ref={(el) => {
-            videoRefs.current[i] = el;
-          }}
-          src={src}
-          muted
-          playsInline
-          preload="auto"
-          autoPlay={i === 0}
-          onEnded={i === active ? next : undefined}
-          onError={i === active ? next : undefined}
-          aria-hidden="true"
-          className={`absolute inset-0 -z-10 h-full w-full object-cover transition-opacity duration-1000 ${
-            i === active ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      ))}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+    <section className="relative isolate min-h-[100svh] overflow-hidden bg-black text-white">
+      {/* Video carousel (cross-fades when a clip ends).
+          Phones show the whole frame (object-contain); larger screens fill the
+          section (object-cover). The text sits over the video on every screen. */}
+      <div className="absolute inset-0 -z-10 bg-black">
+        {VIDEOS.map((src, i) => (
+          <video
+            key={src}
+            ref={(el) => {
+              videoRefs.current[i] = el;
+            }}
+            src={src}
+            muted
+            playsInline
+            preload="auto"
+            autoPlay={i === 0}
+            onEnded={i === active ? next : undefined}
+            onError={i === active ? next : undefined}
+            aria-hidden="true"
+            className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-1000 md:object-cover ${
+              i === active ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+      </div>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/60 via-black/45 to-black/80" />
 
-      {/* Text over video */}
-      <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-6 pb-28 pt-36 text-center">
-        <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-5 py-2.5 text-sm font-medium backdrop-blur-md">
+      {/* Text */}
+      <div className="mx-auto flex min-h-[100svh] max-w-5xl flex-col items-center justify-center px-6 pb-28 pt-32 text-center md:pt-36">
+        <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-medium backdrop-blur-md sm:px-5 sm:py-2.5 sm:text-sm">
           <svg
             width="18"
             height="18"
@@ -64,6 +68,7 @@ export default function Hero() {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
+            className="shrink-0"
           >
             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
             <circle cx="12" cy="12" r="3" />
@@ -71,25 +76,25 @@ export default function Hero() {
           CCTV wholesale distributor in Kochi
         </span>
 
-        <h1 className="mt-8 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
+        <h1 className="mt-6 text-4xl font-semibold leading-[1.08] tracking-tight sm:mt-8 sm:text-6xl md:text-7xl">
           Premium Surveillance Systems, Wholesale From Kochi
         </h1>
 
-        <p className="mt-8 max-w-2xl text-base text-white/80 sm:text-lg">
+        <p className="mt-6 max-w-2xl text-base text-white/80 sm:mt-8 sm:text-lg">
           Hawkeye Vision deals with almost all premium brands including
           Hikvision, CP Plus, TP Link, Toshiba, WD and many more.
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:gap-4">
           <Link
             href="/products"
-            className="rounded-full bg-white px-8 py-4 text-sm font-semibold text-black shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition hover:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            className="w-full rounded-full bg-white px-8 py-4 text-sm font-semibold text-black shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition hover:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:w-auto"
           >
             View products
           </Link>
           <Link
             href="/contact"
-            className="rounded-full border border-white/40 px-8 py-4 text-sm font-semibold text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            className="w-full rounded-full border border-white/40 px-8 py-4 text-sm font-semibold text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:w-auto"
           >
             Contact us
           </Link>

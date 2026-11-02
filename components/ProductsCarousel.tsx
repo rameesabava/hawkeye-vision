@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useMotionValue,
@@ -11,43 +11,122 @@ import {
 } from "framer-motion";
 
 // Put product pictures in /public/products/
+// Cards without a picture yet show a plain panel with the product name.
 const PRODUCTS = [
+  // CCTV segment
   {
-    title: "CCTV Cameras",
-    text: "Reliable cameras from leading brands.",
-    img: "/products/cctv-cameras.webp",
-  },
-  
-  {
-    title: "Security Camera Systems",
-    text: "Complete systems, ready to install.",
-    img: "/products/camera-systems.jpg",
+    segment: "CCTV Segment",
+    title: "Analog Camera",
+    text: "Reliable analog cameras from leading brands.",
+    img: "/products/analog-cameras.png",
   },
   {
-    title: "DVR, NVR & XVR",
-    text: "Recorders to store and manage your footage.",
-    img: "/products/recorders.jpg",
+    segment: "CCTV Segment",
+    title: "DVR",
+    text: "Recorders for analog camera systems.",
+    img: "/products/dvr.png",
   },
   {
-    title: "Access Control Systems",
-    text: "Control who enters, and when.",
-    img: "/products/access-control.jpg",
+    segment: "CCTV Segment",
+    title: "IP Camera",
+    text: "Network cameras for modern setups.",
+    img: "/products/ip-camera.png",
   },
   {
-    title: "IoT Products",
-    text: "Connected devices that extend your security setup.",
-    img: "/products/iot.jpg",
+    segment: "CCTV Segment",
+    title: "NVR",
+    text: "Recorders for IP camera systems.",
+    img: "/products/nvr.png",
   },
   {
-    title: "Service & Support",
-    text: "We service the products we sell, on time.",
-    img: "/products/service.jpg",
+    segment: "CCTV Segment",
+    title: "Cables",
+    text: "Cabling to connect your whole system.",
+    img: "/products/cables.png",
+  },
+  {
+    segment: "CCTV Segment",
+    title: "Switches",
+    text: "Network switches to link and power cameras.",
+    img: "/products/switches.png",
+  },
+  {
+    segment: "CCTV Segment",
+    title: "Accessories",
+    text: "Hard disks and the extras every setup needs.",
+    img: "/products/accessories.png",
+  },
+  {
+    segment: "CCTV Segment",
+    title: "Monitors",
+    text: "Displays for live viewing and playback.",
+    img: "/products/monitors.png",
+  },
+  // IT segment
+  {
+    segment: "IT Segment",
+    title: "Biometric attendance",
+    text: "Fingerprint and face recognition attendance.",
+    img: "/products/biometric.png",
+  },
+  {
+    segment: "IT Segment",
+    title: "Video Door Phones",
+    text: "See and speak to visitors at the door.",
+    img: "/products/video-door-phones.png",
+  },
+  {
+    segment: "IT Segment",
+    title: "Boom Barriers",
+    text: "Controlled vehicle entry and exit.",
+    img: "/products/barriers.png",
+  },
+  {
+    segment: "IT Segment",
+    title: "Interactive Panels",
+    text: "Large touch displays for teaching and meetings.",
+    img: "/products/interactive-panels.png",
   },
 ];
 
 // The next section slides over the last part of this one, so the sideways
 // movement has to finish before then (see OverlapSection's -mt-[100vh]).
 const END = 0.65;
+
+function ProductCard({ product }: { product: (typeof PRODUCTS)[number] }) {
+  const [broken, setBroken] = useState(false);
+
+  return (
+    <article className="shrink-0">
+      {/* The picture is shown whole (object-contain); the text sits below it.
+          Card size follows the screen height, so it grows on large screens. */}
+      <div className="relative aspect-[4/5] h-[40svh] overflow-hidden rounded-3xl bg-neutral-100 sm:h-[44svh] lg:h-[48svh] 2xl:h-[54svh]">
+        {broken ? (
+          <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-neutral-700 to-neutral-950 p-6 text-center text-2xl font-semibold text-white/30">
+            {product.title}
+          </div>
+        ) : (
+          <Image
+            src={product.img}
+            alt={product.title}
+            fill
+            sizes="(min-width: 1536px) 520px, (min-width: 1024px) 400px, 320px"
+            className="object-contain p-2"
+            onError={() => setBroken(true)}
+          />
+        )}
+      </div>
+      {/* w-0 min-w-full keeps the text as wide as the picture */}
+      <div className="mt-4 w-0 min-w-full">
+        <p className="text-xs text-neutral-500">{product.segment}</p>
+        <h3 className="mt-1 text-lg font-semibold 2xl:text-xl">
+          {product.title}
+        </h3>
+        <p className="mt-1 text-sm text-neutral-600">{product.text}</p>
+      </div>
+    </article>
+  );
+}
 
 export default function ProductsCarousel() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -82,8 +161,9 @@ export default function ProductsCarousel() {
   const barScale = useTransform(scrollYProgress, [0, END], [0, 1]);
 
   return (
-    <section ref={wrapRef} className="relative h-[400vh] bg-white text-neutral-950">
-      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden pb-8 pt-28">
+    // Taller than before because there are now 12 cards to scroll through
+    <section ref={wrapRef} className="relative h-[550vh] bg-white text-neutral-950">
+      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden pb-8 pt-24 sm:pt-28">
         <div className="mx-auto w-full max-w-6xl px-6">
           <h2 className="max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
             Everything you need for a complete surveillance setup
@@ -93,25 +173,10 @@ export default function ProductsCarousel() {
         <motion.div
           ref={trackRef}
           style={{ x }}
-          className="mt-8 flex w-max gap-6 px-6 md:px-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))]"
+          className="mt-6 flex w-max gap-5 sm:mt-8 sm:gap-6 px-6 md:px-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))]"
         >
           {PRODUCTS.map((p) => (
-            <article
-              key={p.title}
-              className="relative aspect-[4/5] h-[50vh] shrink-0 overflow-hidden rounded-3xl bg-neutral-200"
-            >
-              <Image
-                src={p.img}
-                alt={p.title}
-                fill
-                sizes="(min-width: 1024px) 28vw, 78vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-6 pt-24 text-white">
-                <h3 className="text-xl font-semibold">{p.title}</h3>
-                <p className="mt-1 text-sm text-white/75">{p.text}</p>
-              </div>
-            </article>
+            <ProductCard key={p.title} product={p} />
           ))}
         </motion.div>
 
