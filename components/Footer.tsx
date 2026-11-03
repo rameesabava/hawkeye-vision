@@ -41,30 +41,29 @@ export default function Footer() {
   return (
     <footer className="relative z-30 border-t border-white/10 bg-neutral-950 px-6 pb-8 pt-16 text-white md:pt-20">
       <div className="mx-auto max-w-6xl">
-        {/* Top row: brand and tagline */}
+        {/* Top row: logo and description */}
         <div className="border-b border-white/10 pb-12">
           <div className="max-w-xl">
-            <Link
-              href="/"
-              aria-label="Hawkeye Vision home"
-              className="inline-flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-            >
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-white">
-                <Image
-                  src="/logo.png"
-                  alt=""
-                  width={48}
-                  height={48}
-                  className="h-11 w-11 object-contain"
-                />
-              </span>
-              <span className="text-2xl font-extrabold tracking-tight">
-                Hawkeye Vision
-              </span>
-            </Link>
+            {/* White panel because the logo has a white background.
+                object-cover trims the empty space above/below the artwork. */}
+          <Link
+  href="/"
+  aria-label="Hawkeye Vision home"
+  className="inline-block rounded-xl bg-white px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+>
+  <span className="relative block aspect-[850/160] h-12 overflow-hidden sm:h-14 md:h-16">
+    <Image
+      src="/logo.png"
+      alt="Hawkeye Vision – The Ultimate Destination for Surveillance Systems"
+      fill
+      sizes="(min-width: 768px) 340px, (min-width: 640px) 298px, 255px"
+      className="object-cover object-[50%_57%]"
+    />
+  </span>
+</Link>
             <p className="mt-5 text-white/70">
-              The ultimate destination for surveillance systems. CCTV wholesale
-              distributor in Kochi, supplying and servicing premium brands.
+              CCTV wholesale distributor in Kochi, supplying and servicing
+              premium brands.
             </p>
           </div>
         </div>

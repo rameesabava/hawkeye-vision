@@ -29,29 +29,26 @@ export default function Header() {
     <header className="fixed inset-x-0 top-4 z-50 px-4">
       <div className="mx-auto max-w-6xl rounded-xl bg-white shadow-[0_2px_16px_rgba(0,0,0,0.08)]">
         <div className="flex items-stretch">
-          {/* Logo + caption */}
-          <Link
-            href="/"
-            aria-label="Hawkeye Vision home"
-            className="flex shrink-0 items-center gap-3 px-4 py-3 md:border-r md:border-neutral-200 md:px-6"
-          >
-            <Image
-              src="/logo.png" // put your logo in /public/logo.png
-              alt="Hawkeye Vision logo"
-              width={48}
-              height={48}
-              priority
-              className="h-11 w-11 object-contain"
-            />
-            <span className="flex flex-col leading-tight">
-              <span className="text-lg font-extrabold tracking-tight text-neutral-900">
-                Hawkeye Vision
-              </span>
-              <span className="hidden max-w-[17rem] text-[11px] font-medium text-neutral-500 sm:block">
-                The Ultimate Destination for Surveillance Systems
-              </span>
-            </span>
-          </Link>
+          {/* Logo (already contains name + tagline).
+              The wrapper has a wide, short ratio and object-cover trims the
+              empty space above/below the artwork, so the height classes
+              below size the actual logo. */}
+         <Link
+  href="/"
+  aria-label="Hawkeye Vision home"
+  className="flex shrink-0 items-center px-4 py-3 md:border-r md:border-neutral-200 md:px-6"
+>
+  <span className="relative block aspect-[850/160] h-9 overflow-hidden sm:h-11 md:h-12 lg:h-16">
+    <Image
+      src="/logo.png"
+      alt="Hawkeye Vision – The Ultimate Destination for Surveillance Systems"
+      fill
+      priority
+      sizes="(min-width: 1024px) 340px, (min-width: 768px) 255px, (min-width: 640px) 234px, 191px"
+      className="object-cover object-[50%_57%]"
+    />
+  </span>
+</Link>
 
           {/* Desktop nav */}
           <nav
