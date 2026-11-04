@@ -239,16 +239,16 @@ export default function Header() {
                 )}
               </div>
             ) : (
-              <div className="flex shrink-0 items-center gap-1.5">
+              <div className="flex shrink-0 items-center gap-2 md:gap-2.5">
                 <Link
                   href="/login"
-                  className="whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:text-[#081F4D]"
+                  className="whitespace-nowrap rounded-full px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-semibold text-slate-700 transition hover:bg-slate-100/70 hover:text-[#081F4D]"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="whitespace-nowrap rounded-full bg-[#081F4D] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0A2660]"
+                  className="whitespace-nowrap rounded-full bg-[#081F4D] px-3.5 py-1.5 md:px-5 md:py-2 text-xs md:text-sm font-semibold text-white shadow-sm transition hover:bg-[#0A2660] hover:shadow"
                 >
                   Register
                 </Link>
@@ -373,16 +373,16 @@ export default function Header() {
                 </button>
               </>
             ) : (
-              <div className="flex gap-2 pt-1">
+              <div className="flex gap-2.5 pt-1.5">
                 <Link
                   href="/login"
-                  className="flex-1 text-center rounded-lg border border-slate-200 py-2 text-sm font-semibold text-[#081F4D] hover:bg-blue-50"
+                  className="flex-1 text-center rounded-lg border border-slate-200 py-2.5 text-[15px] font-semibold text-[#081F4D] transition hover:bg-blue-50"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="flex-1 text-center rounded-lg bg-[#081F4D] py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#0A2660]"
+                  className="flex-1 text-center rounded-lg bg-[#081F4D] py-2.5 text-[15px] font-semibold text-white shadow-sm transition hover:bg-[#0A2660]"
                 >
                   Register
                 </Link>
