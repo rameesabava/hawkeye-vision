@@ -92,6 +92,7 @@ function getAuthHeaders(token?: string | null): HeadersInit {
     token || (typeof window !== "undefined" ? localStorage.getItem("hawkeye_token") : null);
   return {
     "Content-Type": "application/json",
+    "Bypass-Tunnel-Reminder": "true",
     ...(currentToken ? { Authorization: `Bearer ${currentToken}` } : {}),
   };
 }
@@ -139,7 +140,7 @@ export const api = {
   async login(credentials: { email: string; password: string }) {
     const res = await fetch(`${API_BASE_URL}/login`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Bypass-Tunnel-Reminder": "true" },
       body: JSON.stringify(credentials),
     });
     return handleResponse<{ user: User; token: string }>(res, "Login failed");
@@ -148,7 +149,7 @@ export const api = {
   async register(details: { username: string; email: string; password: string; phone: string }) {
     const res = await fetch(`${API_BASE_URL}/register`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Bypass-Tunnel-Reminder": "true" },
       body: JSON.stringify(details),
     });
     return handleResponse<User>(res, "Registration failed");
@@ -192,21 +193,29 @@ export const api = {
     if (params?.brand && params.brand !== "All")
       url.searchParams.set("brand", params.brand);
 
-    const res = await fetch(url.toString(), { cache: "no-store" });
+    const res = await fetch(url.toString(), {
+      cache: "no-store",
+      headers: { "Bypass-Tunnel-Reminder": "true" },
+    });
     return handleResponse<Product[]>(res, "Failed to fetch products");
   },
 
   async getProductById(id: string | number) {
-    const res = await fetch(`${API_BASE_URL}/product/${id}`, { cache: "no-store" });
+    const res = await fetch(`${API_BASE_URL}/product/${id}`, {
+      cache: "no-store",
+      headers: { "Bypass-Tunnel-Reminder": "true" },
+    });
     return handleResponse<Product>(res, "Failed to fetch product");
   },
 
   async addProduct(formData: FormData, token?: string) {
     const currentToken =
       token || (typeof window !== "undefined" ? localStorage.getItem("hawkeye_token") : null);
+    const headers: Record<string, string> = { "Bypass-Tunnel-Reminder": "true" };
+    if (currentToken) headers.Authorization = `Bearer ${currentToken}`;
     const res = await fetch(`${API_BASE_URL}/product/add`, {
       method: "POST",
-      headers: currentToken ? { Authorization: `Bearer ${currentToken}` } : {},
+      headers,
       body: formData,
     });
     return handleResponse<Product>(res, "Failed to add product");
@@ -215,9 +224,11 @@ export const api = {
   async updateProduct(id: string | number, formData: FormData, token?: string) {
     const currentToken =
       token || (typeof window !== "undefined" ? localStorage.getItem("hawkeye_token") : null);
+    const headers: Record<string, string> = { "Bypass-Tunnel-Reminder": "true" };
+    if (currentToken) headers.Authorization = `Bearer ${currentToken}`;
     const res = await fetch(`${API_BASE_URL}/product/${id}`, {
       method: "PUT",
-      headers: currentToken ? { Authorization: `Bearer ${currentToken}` } : {},
+      headers,
       body: formData,
     });
     return handleResponse<Product>(res, "Failed to update product");
@@ -378,6 +389,7 @@ export const api = {
   async getReviews(productId: number | string) {
     const res = await fetch(`${API_BASE_URL}/reviews/${productId}`, {
       cache: "no-store",
+      headers: { "Bypass-Tunnel-Reminder": "true" },
     });
     return handleResponse<Review[]>(res, "Failed to fetch reviews");
   },

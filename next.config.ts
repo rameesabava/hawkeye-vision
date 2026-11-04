@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "hawkeye-backend-live.loca.lt",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "hawkeye-backend-9e82.onrender.com",
         pathname: "/**",
       },
