@@ -1,5 +1,5 @@
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  process.env.NEXT_PUBLIC_API_URL || "https://hawkeye-backend-9e82.onrender.com";
 
 export function getImageUrl(imagePath?: string | null): string {
   if (!imagePath) return "/products/recorders.jpg";
