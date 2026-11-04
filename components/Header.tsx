@@ -53,15 +53,15 @@ export default function Header() {
           <Link
             href="/"
             aria-label="Hawkeye Vision home"
-            className="flex shrink-0 items-center px-3 py-2 sm:px-4 sm:py-2.5 md:border-r md:border-blue-100 md:px-5"
+            className="flex shrink-0 items-center px-3 py-2 sm:px-4 sm:py-2.5 md:border-r md:border-blue-100 md:px-5 lg:px-6"
           >
-            <span className="relative block aspect-[850/160] h-7 sm:h-8 md:h-9 lg:h-10 overflow-hidden">
+            <span className="relative block aspect-[850/160] h-7 sm:h-8 md:h-11 lg:h-12 xl:h-14 overflow-hidden">
               <Image
                 src="/logo.png"
                 alt="Hawkeye Vision – The Ultimate Destination for Surveillance Systems"
                 fill
                 priority
-                sizes="(min-width: 1024px) 210px, (min-width: 768px) 190px, 150px"
+                sizes="(min-width: 1280px) 300px, (min-width: 1024px) 260px, (min-width: 768px) 240px, 160px"
                 className="object-cover object-[50%_57%]"
               />
             </span>
@@ -95,11 +95,10 @@ export default function Header() {
               href="/cart"
               onClick={handleCartClick}
               aria-label="Cart"
-              className="relative shrink-0 flex items-center p-1.5 text-slate-700 transition hover:text-[#081F4D]"
+              className="relative shrink-0 flex items-center p-1.5 md:p-2 text-slate-700 transition hover:text-[#081F4D]"
             >
               <svg
-                width="19"
-                height="19"
+                className="h-5 w-5 md:h-6 md:w-6 transition-transform hover:scale-105"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -112,7 +111,7 @@ export default function Header() {
                 <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
               </svg>
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#081F4D] px-1 text-[10px] font-bold text-white shadow-sm">
+                <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-[16px] md:h-5 md:min-w-[20px] items-center justify-center rounded-full bg-[#081F4D] px-1 text-[10px] md:text-xs font-bold text-white shadow-sm">
                   {cartCount}
                 </span>
               )}
@@ -124,29 +123,27 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() => setUserDropdown((prev) => !prev)}
-                  className="flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50/60 px-2.5 py-1 text-xs font-semibold text-[#081F4D] transition hover:bg-blue-100/60"
+                  className="flex items-center gap-1.5 md:gap-2 rounded-full border border-blue-200 bg-blue-50/60 px-2.5 py-1 md:px-3 md:py-1.5 text-xs md:text-sm font-semibold text-[#081F4D] transition hover:bg-blue-100/60"
                 >
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#081F4D] text-[10px] text-white">
+                  <span className="flex h-5 w-5 md:h-6 md:w-6 items-center justify-center rounded-full bg-[#081F4D] text-[10px] md:text-xs text-white">
                     {user.username ? user.username.charAt(0).toUpperCase() : "U"}
                   </span>
-                  <span className="max-w-[70px] lg:max-w-[100px] truncate whitespace-nowrap">
+                  <span className="max-w-[70px] lg:max-w-[110px] truncate whitespace-nowrap">
                     {user.username}
                   </span>
                   {user.role === "admin" && (
-                    <span className="rounded bg-sky-200/80 px-1.5 py-0.2 text-[9px] font-bold text-sky-900 uppercase">
+                    <span className="rounded bg-sky-200/80 px-1.5 py-0.5 text-[9px] md:text-[10px] font-bold text-sky-900 uppercase">
                       Admin
                     </span>
                   )}
                   <svg
-                    width="12"
-                    height="12"
+                    className={`h-3 w-3 md:h-3.5 md:w-3.5 transition-transform duration-200 ${userDropdown ? "rotate-180" : ""}`}
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transition-transform duration-200 ${userDropdown ? "rotate-180" : ""}`}
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>

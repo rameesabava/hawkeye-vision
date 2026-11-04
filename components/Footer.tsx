@@ -48,14 +48,14 @@ export default function Footer() {
             <Link
               href="/"
               aria-label="Hawkeye Vision home"
-              className="inline-block rounded-xl bg-white px-3 py-1.5 sm:px-3.5 sm:py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              className="inline-block rounded-2xl bg-white px-3 py-1.5 sm:px-3.5 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
-              <span className="relative block aspect-[850/160] h-7 sm:h-8 md:h-9 overflow-hidden">
+              <span className="relative block aspect-[850/160] h-7 sm:h-8 md:h-12 lg:h-14 xl:h-16 overflow-hidden">
                 <Image
                   src="/logo.png"
                   alt="Hawkeye Vision – The Ultimate Destination for Surveillance Systems"
                   fill
-                  sizes="(min-width: 768px) 200px, (min-width: 640px) 175px, 150px"
+                  sizes="(min-width: 1280px) 340px, (min-width: 1024px) 300px, (min-width: 768px) 255px, 170px"
                   className="object-cover object-[50%_57%]"
                 />
               </span>
@@ -102,37 +102,72 @@ export default function Footer() {
           {/* Contact: full width on phones and tablets, own column on laptops */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <h2 className="text-lg font-semibold text-white">Contact</h2>
-            <address className="mt-5 space-y-6 not-italic text-blue-100/75">
+            <address className="mt-5 space-y-5 not-italic text-blue-100/75">
               <a
                 href={MAP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Open our address in Google Maps"
-                className={`block leading-relaxed ${linkClass}`}
+                className={`flex items-start gap-2.5 leading-relaxed ${linkClass}`}
               >
-                {ADDRESS.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
+                <svg
+                  className="mt-0.5 h-4 w-4 md:h-5 md:w-5 shrink-0 text-sky-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                <span className="block text-sm md:text-base">
+                  {ADDRESS.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </span>
               </a>
 
               <div className="divide-y divide-white/15 border-y border-white/15">
-                <div className="flex flex-col gap-1 py-3 sm:flex-row sm:gap-4">
-                  <span className="w-12 shrink-0 text-blue-200/60">Mob</span>
-                  <span className="flex flex-col gap-1">
+                <div className="flex items-start gap-2.5 py-3">
+                  <svg
+                    className="mt-0.5 h-4 w-4 md:h-5 md:w-5 shrink-0 text-sky-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                  <div className="flex flex-col gap-1 text-sm md:text-base">
                     {PHONES.map((p) => (
                       <a key={p.tel} href={`tel:${p.tel}`} className={linkClass}>
                         {p.label}
                       </a>
                     ))}
-                  </span>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-1 py-3 sm:flex-row sm:gap-4">
-                  <span className="w-12 shrink-0 text-blue-200/60">Mail</span>
+                <div className="flex items-center gap-2.5 py-3">
+                  <svg
+                    className="h-4 w-4 md:h-5 md:w-5 shrink-0 text-sky-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="20" height="16" x="2" y="4" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </svg>
                   <a
                     href={`mailto:${EMAIL}`}
-                    className={`whitespace-nowrap text-[15px] sm:text-base ${linkClass}`}
+                    className={`whitespace-nowrap text-sm md:text-base ${linkClass}`}
                   >
                     {EMAIL}
                   </a>
