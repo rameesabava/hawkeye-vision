@@ -59,8 +59,8 @@ function validate(v: Values): Errors {
 }
 
 const base =
-  "mt-2 w-full rounded-xl border bg-white px-4 py-3 text-base text-neutral-950 placeholder:text-neutral-400 transition focus:outline-none focus:ring-2";
-const ok = "border-neutral-300 focus:border-neutral-950 focus:ring-sky";
+  "mt-2 w-full rounded-xl border bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 transition focus:outline-none focus:ring-2";
+const ok = "border-blue-200 focus:border-[#081F4D] focus:ring-[#081F4D]/15";
 const bad = "border-red-500 focus:border-red-600 focus:ring-red-200";
 
 export default function ContactForm({ email }: { email: string }) {
@@ -135,12 +135,12 @@ export default function ContactForm({ email }: { email: string }) {
   return (
     <form ref={formRef} onSubmit={onSubmit} noValidate className="mt-8 grid gap-5">
       <div className="grid gap-5 sm:grid-cols-2">
-        <label className="text-sm font-medium text-neutral-800">
+        <label className="text-sm font-semibold text-slate-800">
           Name
           <input {...props("name")} autoComplete="name" placeholder="Your name" />
           {err("name")}
         </label>
-        <label className="text-sm font-medium text-neutral-800">
+        <label className="text-sm font-semibold text-slate-800">
           Phone
           <input
             {...props("phone")}
@@ -153,7 +153,7 @@ export default function ContactForm({ email }: { email: string }) {
         </label>
       </div>
 
-      <label className="text-sm font-medium text-neutral-800">
+      <label className="text-sm font-semibold text-slate-800">
         Email (optional)
         <input
           {...props("email")}
@@ -164,7 +164,7 @@ export default function ContactForm({ email }: { email: string }) {
         {err("email")}
       </label>
 
-      <label className="text-sm font-medium text-neutral-800">
+      <label className="text-sm font-semibold text-slate-800">
         I’m looking for
         <select {...props("interest")}>
           {INTERESTS.map((i) => (
@@ -173,10 +173,10 @@ export default function ContactForm({ email }: { email: string }) {
         </select>
       </label>
 
-      <label className="text-sm font-medium text-neutral-800">
+      <label className="text-sm font-semibold text-slate-800">
         <span className="flex items-end justify-between">
           Message
-          <span className="text-xs font-normal text-neutral-500">
+          <span className="text-xs font-normal text-slate-500">
             {values.message.length}/1000
           </span>
         </span>
@@ -192,7 +192,7 @@ export default function ContactForm({ email }: { email: string }) {
 
       <button
         type="submit"
-        className="rounded-full bg-neutral-950 px-8 py-4 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(8,31,77,0.25)] transition hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950"
+        className="rounded-full bg-[#081F4D] px-8 py-4 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(8,31,77,0.25)] transition hover:bg-[#0A2660] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#081F4D]"
       >
         Submit enquiry
       </button>
@@ -205,7 +205,7 @@ export default function ContactForm({ email }: { email: string }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-xl bg-neutral-100 px-4 py-3 text-sm text-neutral-700"
+            className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-[#081F4D]"
           >
             Thank you. Your email app should open with the enquiry filled in.
             Press send there to complete it.

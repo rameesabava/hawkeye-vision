@@ -86,24 +86,24 @@ function HeroHeadline({ text }: { text: string }) {
 function Hero() {
   const reduce = useReduce();
   return (
-    <section className="relative isolate overflow-hidden bg-neutral-950 px-6 pb-28 pt-44 text-white md:pt-56">
+    <section className="relative isolate overflow-hidden bg-gradient-to-br from-[#081F4D] via-[#0A2660] to-[#071838] px-6 pb-28 pt-44 text-white md:pt-56">
       {/* Slow-moving glow behind the headline */}
       <motion.div
         aria-hidden="true"
-        className="absolute left-1/2 top-1/2 -z-10 h-[60vw] max-h-[720px] w-[60vw] max-w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky/25 blur-[120px]"
+        className="absolute left-1/2 top-1/2 -z-10 h-[60vw] max-h-[720px] w-[60vw] max-w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-400/20 blur-[120px]"
         animate={reduce ? undefined : { x: [-80, 80, -80], y: [-30, 30, -30] }}
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <div className="mx-auto max-w-6xl">
-        <motion.p
+        <motion.div
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="text-base font-medium text-sky"
+          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-sky-200 backdrop-blur-md"
         >
           About Hawkeye Vision
-        </motion.p>
+        </motion.div>
 
         <div className="mt-6 max-w-5xl">
           <HeroHeadline text="Surveillance systems, supplied and serviced from Kochi" />
@@ -113,7 +113,7 @@ function Hero() {
           initial={reduce ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: EASE, delay: 1.1 }}
-          className="mt-10 max-w-2xl text-lg text-white/70"
+          className="mt-10 max-w-2xl text-lg text-blue-100/80"
         >
           Wholesale supply of premium CCTV and security products, backed by
           service for everything we sell.
@@ -151,7 +151,7 @@ function Statement() {
   };
 
   return (
-    <section className="bg-white px-6 py-28 text-neutral-950 md:py-40">
+    <section className="bg-slate-50 px-6 py-28 text-slate-900 md:py-40">
       <motion.p
         variants={container}
         initial={reduce ? "shown" : "hidden"}
@@ -166,7 +166,7 @@ function Statement() {
           <motion.span
             key={b}
             variants={pop}
-            className="mx-1 inline-block rounded-full border border-neutral-300 bg-neutral-50 px-5 py-0.5 align-middle text-[0.75em] transition-colors hover:border-neutral-950 hover:bg-neutral-950 hover:text-white"
+            className="mx-1 inline-block rounded-full border border-blue-200 bg-white px-5 py-0.5 align-middle text-[0.75em] font-medium text-[#081F4D] shadow-sm transition-colors hover:border-[#081F4D] hover:bg-[#081F4D] hover:text-white"
           >
             {b}
           </motion.span>
@@ -184,15 +184,24 @@ function Statement() {
 function Supply() {
   const reduce = useReduce();
   return (
-    <section className="bg-neutral-950 px-6 py-28 text-white md:py-36">
+    <section className="bg-gradient-to-br from-[#081F4D] via-[#0A2660] to-[#071838] px-6 py-28 text-white md:py-36">
       <div className="mx-auto grid max-w-6xl gap-16 lg:grid-cols-[1fr_1.4fr]">
         <div className="lg:sticky lg:top-32 lg:self-start">
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: EASE }}
+            className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-sky-200"
+          >
+            Core Offerings
+          </motion.div>
           <motion.h2
             initial={reduce ? false : { opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8, ease: EASE }}
-            className="text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl"
+            className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl"
           >
             What we deal in
           </motion.h2>
@@ -201,7 +210,7 @@ function Supply() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
-            className="mt-6 max-w-md text-lg text-white/70"
+            className="mt-6 max-w-md text-lg text-blue-100/80"
           >
             Security surveillance systems from the camera to the recorder to
             the door, and the service to keep them running.
@@ -222,7 +231,7 @@ function Supply() {
               <motion.span
                 variants={{ hidden: { scaleX: 0 }, shown: { scaleX: 1 } }}
                 transition={{ duration: 1, ease: EASE }}
-                className="absolute inset-x-0 top-0 h-px origin-left bg-sky/30"
+                className="absolute inset-x-0 top-0 h-px origin-left bg-sky-400/30"
               />
               <motion.h3
                 variants={{
@@ -230,7 +239,7 @@ function Supply() {
                   shown: { opacity: 1, y: 0 },
                 }}
                 transition={{ duration: 0.7, ease: EASE }}
-                className="text-2xl font-semibold tracking-tight transition duration-300 group-hover:translate-x-2 group-hover:text-sky sm:text-3xl"
+                className="text-2xl font-bold tracking-tight text-white transition duration-300 group-hover:translate-x-2 group-hover:text-sky-300 sm:text-3xl"
               >
                 {item.title}
               </motion.h3>
@@ -249,7 +258,7 @@ function Supply() {
                       shown: { opacity: 1, y: 0 },
                     }}
                     transition={{ duration: 0.5, ease: EASE }}
-                    className="rounded-full border border-white/20 px-4 py-2 text-sm text-white/80"
+                    className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-blue-100 backdrop-blur-sm"
                   >
                     {name}
                   </motion.li>
@@ -259,7 +268,7 @@ function Supply() {
                 <motion.span
                   variants={{ hidden: { scaleX: 0 }, shown: { scaleX: 1 } }}
                   transition={{ duration: 1, ease: EASE, delay: 0.3 }}
-                  className="absolute inset-x-0 bottom-0 h-px origin-left bg-sky/30"
+                  className="absolute inset-x-0 bottom-0 h-px origin-left bg-sky-400/30"
                 />
               )}
             </motion.li>
@@ -288,14 +297,14 @@ function BrandsAndCta() {
   }, [reduce, paused]);
 
   return (
-    <section className="overflow-hidden bg-white px-6 py-28 text-neutral-950 md:py-36">
+    <section className="overflow-hidden bg-white px-6 py-28 text-slate-900 md:py-36">
       <div className="mx-auto max-w-6xl">
         <motion.h2
           initial={reduce ? false : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease: EASE }}
-          className="max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl"
+          className="max-w-3xl text-4xl font-bold leading-[1.1] tracking-tight text-[#081F4D] sm:text-5xl"
         >
           All the major brands, one wholesale partner
         </motion.h2>
@@ -306,8 +315,8 @@ function BrandsAndCta() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          <span className="shrink-0 text-lg text-neutral-500">We supply</span>
-          <div className="h-[1.25em] flex-1 overflow-hidden text-5xl font-semibold tracking-tight sm:text-7xl md:text-8xl">
+          <span className="shrink-0 text-lg font-medium text-slate-500">We supply</span>
+          <div className="h-[1.25em] flex-1 overflow-hidden text-5xl font-bold tracking-tight text-[#081F4D] sm:text-7xl md:text-8xl">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={BRANDS[active]}
@@ -337,17 +346,17 @@ function BrandsAndCta() {
               type="button"
               onClick={() => setActive(i)}
               aria-pressed={i === active}
-              className={`relative rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 ${
+              className={`relative rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#081F4D] ${
                 i === active
                   ? "border-transparent text-white"
-                  : "border-neutral-300 text-neutral-600 hover:border-neutral-950 hover:text-neutral-950"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-[#081F4D] hover:text-[#081F4D]"
               }`}
             >
               {i === active && (
                 <motion.span
                   layoutId="brand-highlight"
                   transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                  className="absolute inset-0 rounded-full bg-neutral-950"
+                  className="absolute inset-0 rounded-full bg-[#081F4D]"
                 />
               )}
               <span className="relative">{name}</span>
@@ -363,25 +372,25 @@ function BrandsAndCta() {
         transition={{ duration: 0.8, ease: EASE }}
         className="mx-auto mt-24 max-w-6xl"
       >
-        <div className="flex flex-col items-start justify-between gap-8 rounded-3xl bg-neutral-950 p-8 text-white sm:p-12 md:flex-row md:items-center">
+        <div className="flex flex-col items-start justify-between gap-8 rounded-3xl bg-gradient-to-br from-[#081F4D] via-[#0A2660] to-[#071838] p-8 text-white shadow-xl sm:p-12 md:flex-row md:items-center">
           <div className="max-w-xl">
-            <h3 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h3 className="text-3xl font-bold tracking-tight sm:text-4xl">
               Looking for a wholesale supplier?
             </h3>
-            <p className="mt-3 text-white/70">
+            <p className="mt-3 text-blue-100/80">
               Tell us what you need, or browse what we stock.
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
             <Link
               href="/contact"
-              className="rounded-full bg-white px-8 py-4 text-sm font-semibold text-black transition hover:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              className="rounded-full bg-white px-8 py-4 text-sm font-semibold text-[#081F4D] shadow-md transition hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
               Contact us
             </Link>
             <Link
               href="/products"
-              className="rounded-full border border-white/30 px-8 py-4 text-sm font-semibold transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              className="rounded-full border border-white/30 px-8 py-4 text-sm font-semibold text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
               View products
             </Link>

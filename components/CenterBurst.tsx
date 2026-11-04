@@ -73,7 +73,7 @@ function BurstImage({
     <div className="pointer-events-none absolute inset-0 grid place-items-center">
       <motion.div
         style={{ x: moveX, y: moveY, scale, opacity, width }}
-        className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 shadow-2xl"
+        className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/20 shadow-[0_20px_40px_rgba(8,31,77,0.4)]"
       >
         <Image
           src={src}
@@ -104,7 +104,7 @@ export default function CenterBurst() {
   const reachY = Math.max(0, h / 2 - (height * END_SCALE) / 2 - MARGIN);
 
   return (
-    <section ref={ref} className="relative h-[350vh] bg-neutral-950 text-white">
+    <section ref={ref} className="relative h-[350vh] bg-gradient-to-b from-[#081F4D] via-[#0A2660] to-[#081F4D] text-white">
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Pictures fly out from behind the text */}
         {IMAGES.map((img, i) => (
@@ -121,10 +121,10 @@ export default function CenterBurst() {
 
         <div className="relative z-10 grid h-full place-items-center px-6">
           <div className="max-w-3xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
               Complete security surveillance, supplied and serviced
             </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-base text-white/70 sm:text-lg">
+            <p className="mx-auto mt-6 max-w-2xl text-base text-blue-100/80 sm:text-lg">
               Analog and IP cameras, DVR and NVR recorders, cables, switches,
               accessories, monitors, biometric attendance, video door phones,
               boom barriers and interactive panels. We also service what we

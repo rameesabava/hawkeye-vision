@@ -291,7 +291,7 @@ export default function GalleryPage() {
 
 const css = `
 .hv{--w:max(280px,min(46vw,calc((100vh - 240px) * 1.22),780px));min-height:100vh;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden;
-background:radial-gradient(110% 80% at 50% 8%,#323c72 0%,#222949 48%,#171c38 100%);color:#fff;
+background:radial-gradient(110% 80% at 50% 8%,#0A2660 0%,#081F4D 50%,#061533 100%);color:#fff;
 font-family:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;
 padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
 .hv *{box-sizing:border-box}

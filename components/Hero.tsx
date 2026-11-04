@@ -28,11 +28,11 @@ export default function Hero() {
   }, [active]);
 
   return (
-    <section className="relative isolate min-h-[100svh] overflow-hidden bg-black text-white">
+    <section className="relative isolate min-h-[100svh] overflow-hidden bg-[#081F4D] text-white">
       {/* Video carousel (cross-fades when a clip ends).
           Phones show the whole frame (object-contain); larger screens fill the
           section (object-cover). The text sits over the video on every screen. */}
-      <div className="absolute inset-0 -z-10 bg-black">
+      <div className="absolute inset-0 -z-10 bg-[#081F4D]">
         {VIDEOS.map((src, i) => (
           <video
             key={src}
@@ -53,11 +53,11 @@ export default function Hero() {
           />
         ))}
       </div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/60 via-black/45 to-black/80" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#081F4D]/90 via-[#0A2660]/75 to-[#081F4D]/95" />
 
       {/* Text */}
       <div className="mx-auto flex min-h-[100svh] max-w-5xl flex-col items-center justify-center px-6 pb-28 pt-32 text-center md:pt-36">
-        <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-medium backdrop-blur-md sm:px-5 sm:py-2.5 sm:text-sm">
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-sky-200 backdrop-blur-md sm:px-5 sm:py-2.5 sm:text-sm">
           <svg
             width="18"
             height="18"
@@ -68,7 +68,7 @@ export default function Hero() {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
-            className="shrink-0"
+            className="shrink-0 text-sky-300"
           >
             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
             <circle cx="12" cy="12" r="3" />
@@ -76,11 +76,11 @@ export default function Hero() {
           CCTV wholesale distributor in Kochi
         </span>
 
-        <h1 className="mt-6 text-4xl font-semibold leading-[1.08] tracking-tight sm:mt-8 sm:text-6xl md:text-7xl">
+        <h1 className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-white sm:mt-8 sm:text-6xl md:text-7xl">
           Premium Surveillance Systems, Wholesale From Kochi
         </h1>
 
-        <p className="mt-6 max-w-2xl text-base text-white/80 sm:mt-8 sm:text-lg">
+        <p className="mt-6 max-w-2xl text-base text-blue-100/90 sm:mt-8 sm:text-lg">
           Hawkeye Vision deals with almost all premium brands including
           Hikvision, CP Plus, TP Link, Toshiba, WD and many more.
         </p>
@@ -88,7 +88,7 @@ export default function Hero() {
         <div className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:gap-4">
           <Link
             href="/products"
-            className="w-full rounded-full bg-white px-8 py-4 text-sm font-semibold text-black shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition hover:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:w-auto"
+            className="w-full rounded-full bg-white px-8 py-4 text-sm font-semibold text-[#081F4D] shadow-[0_10px_30px_rgba(8,31,77,0.35)] transition hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:w-auto"
           >
             View products
           </Link>
@@ -111,7 +111,7 @@ export default function Hero() {
             aria-label={`Show video ${i + 1}`}
             aria-current={i === active}
             className={`h-1.5 w-10 rounded-full transition-colors ${
-              i === active ? "bg-white" : "bg-white/30 hover:bg-white/50"
+              i === active ? "bg-sky-400" : "bg-white/30 hover:bg-white/50"
             }`}
           />
         ))}

@@ -4,13 +4,14 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { AuthProvider } from "@/context/AuthContext";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
 
-// Change this to your real domain when the site goes live
 const SITE_URL = "https://www.hawkeyevision.in";
 const SITE_NAME = "Hawkeye Vision";
 const DESCRIPTION =
@@ -42,7 +43,6 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "Hawkeye Vision | CCTV Wholesale Distributor in Kochi",
     description: DESCRIPTION,
-    // Add app/opengraph-image.png (1200x630) and Next.js will use it automatically
   },
   twitter: {
     card: "summary_large_image",
@@ -53,8 +53,6 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  // Put icon.png / apple-icon.png in /app and Next.js picks them up automatically.
-  // Remove this block if you do that.
   icons: {
     icon: "/favicon.ico",
   },
@@ -74,10 +72,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <Header />
-        <main>{children}</main>
-        <WhatsAppButton />
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <main>{children}</main>
+          <WhatsAppButton />
+          <Footer />
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            duration={3500}
+            toastOptions={{
+              style: {
+                borderRadius: "1rem",
+                fontSize: "0.875rem",
+                padding: "1rem",
+              },
+            }}
+          />
+        </AuthProvider>
       </body>
     </html>
   );

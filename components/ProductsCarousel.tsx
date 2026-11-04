@@ -100,9 +100,9 @@ function ProductCard({ product }: { product: (typeof PRODUCTS)[number] }) {
     <article className="shrink-0">
       {/* The picture is shown whole (object-contain); the text sits below it.
           Card size follows the screen height, so it grows on large screens. */}
-      <div className="relative aspect-[4/5] h-[40svh] overflow-hidden rounded-3xl bg-neutral-100 sm:h-[44svh] lg:h-[48svh] 2xl:h-[54svh]">
+      <div className="relative aspect-[4/5] h-[40svh] overflow-hidden rounded-3xl border border-blue-100 bg-white p-3 shadow-sm transition hover:shadow-md sm:h-[44svh] lg:h-[48svh] 2xl:h-[54svh]">
         {broken ? (
-          <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-neutral-700 to-neutral-950 p-6 text-center text-2xl font-semibold text-white/30">
+          <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-[#081F4D] to-[#0A2660] p-6 text-center text-2xl font-semibold text-white/50">
             {product.title}
           </div>
         ) : (
@@ -118,11 +118,11 @@ function ProductCard({ product }: { product: (typeof PRODUCTS)[number] }) {
       </div>
       {/* w-0 min-w-full keeps the text as wide as the picture */}
       <div className="mt-4 w-0 min-w-full">
-        <p className="text-xs text-neutral-500">{product.segment}</p>
-        <h3 className="mt-1 text-lg font-semibold 2xl:text-xl">
+        <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">{product.segment}</p>
+        <h3 className="mt-1 text-lg font-bold text-[#081F4D] 2xl:text-xl">
           {product.title}
         </h3>
-        <p className="mt-1 text-sm text-neutral-600">{product.text}</p>
+        <p className="mt-1 text-sm text-slate-600">{product.text}</p>
       </div>
     </article>
   );
@@ -162,10 +162,13 @@ export default function ProductsCarousel() {
 
   return (
     // Taller than before because there are now 12 cards to scroll through
-    <section ref={wrapRef} className="relative h-[550vh] bg-white text-neutral-950">
+    <section ref={wrapRef} className="relative h-[550vh] bg-slate-50 text-slate-900">
       <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden pb-8 pt-24 sm:pt-28">
         <div className="mx-auto w-full max-w-6xl px-6">
-          <h2 className="max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-blue-100/80 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-[#081F4D]">
+            Comprehensive Inventory
+          </div>
+          <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-[#081F4D] sm:text-4xl lg:text-5xl">
             Everything you need for a complete surveillance setup
           </h2>
         </div>
@@ -181,11 +184,11 @@ export default function ProductsCarousel() {
         </motion.div>
 
         {/* Scroll progress */}
-        <div className="mx-auto mt-8 h-0.5 w-full max-w-6xl px-6">
-          <div className="h-full bg-neutral-200">
+        <div className="mx-auto mt-8 h-1 w-full max-w-6xl px-6">
+          <div className="h-full rounded-full bg-blue-200/70 overflow-hidden">
             <motion.div
               style={{ scaleX: barScale }}
-              className="h-full origin-left bg-neutral-950"
+              className="h-full origin-left bg-[#081F4D]"
             />
           </div>
         </div>

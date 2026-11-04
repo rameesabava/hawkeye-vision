@@ -40,9 +40,9 @@ function BrandCard({
         }}
       >
         {/* Front: logo */}
-        <div className="absolute inset-0 rounded-2xl border border-neutral-200 bg-white [backface-visibility:hidden]">
+        <div className="absolute inset-0 rounded-2xl border border-blue-100 bg-white shadow-sm [backface-visibility:hidden]">
           {broken ? (
-            <span className="grid h-full place-items-center text-xl font-bold text-neutral-900">
+            <span className="grid h-full place-items-center text-xl font-bold text-[#081F4D]">
               {brand.name}
             </span>
           ) : (
@@ -58,7 +58,7 @@ function BrandCard({
         </div>
 
         {/* Back: brand name */}
-        <div className="absolute inset-0 grid place-items-center rounded-2xl bg-neutral-950 text-lg font-semibold text-white [backface-visibility:hidden] [transform:rotateX(180deg)]">
+        <div className="absolute inset-0 grid place-items-center rounded-2xl bg-[#081F4D] text-lg font-bold text-white shadow-md [backface-visibility:hidden] [transform:rotateX(180deg)]">
           {brand.name}
         </div>
       </motion.div>
@@ -114,13 +114,16 @@ export default function BrandsSection() {
   }, [inView, reduce]);
 
   return (
-    <section className="bg-white px-6 py-28 text-neutral-950">
+    <section className="bg-slate-50 px-6 py-28 text-slate-900">
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-blue-100/80 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-[#081F4D]">
+            Official Brand Portfolio
+          </div>
+          <h2 className="text-4xl font-bold tracking-tight text-[#081F4D] sm:text-5xl">
             All the major brands, one wholesale partner
           </h2>
-          <p className="mt-6 text-lg text-neutral-600">
+          <p className="mt-6 text-lg text-slate-600">
             Hikvision, CP Plus, TP-Link, Toshiba, Western Digital and many more,
             all available through Hawkeye Vision.
           </p>

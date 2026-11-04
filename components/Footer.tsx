@@ -35,35 +35,34 @@ const SEGMENTS = [
 ];
 
 const linkClass =
-  "transition-colors hover:text-sky focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
+  "transition-colors hover:text-sky-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
 
 export default function Footer() {
   return (
-    <footer className="relative z-30 border-t border-white/10 bg-neutral-950 px-6 pb-8 pt-16 text-white md:pt-20">
+    <footer className="relative z-30 border-t border-blue-900/50 bg-[#081F4D] px-6 pb-8 pt-16 text-white md:pt-20">
       <div className="mx-auto max-w-6xl">
         {/* Top row: logo and description */}
-        <div className="border-b border-white/10 pb-12">
+        <div className="border-b border-white/15 pb-12">
           <div className="max-w-xl">
-            {/* White panel because the logo has a white background.
-                object-cover trims the empty space above/below the artwork. */}
-          <Link
-  href="/"
-  aria-label="Hawkeye Vision home"
-  className="inline-block rounded-xl bg-white px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
->
-  <span className="relative block aspect-[850/160] h-12 overflow-hidden sm:h-14 md:h-16">
-    <Image
-      src="/logo.png"
-      alt="Hawkeye Vision – The Ultimate Destination for Surveillance Systems"
-      fill
-      sizes="(min-width: 768px) 340px, (min-width: 640px) 298px, 255px"
-      className="object-cover object-[50%_57%]"
-    />
-  </span>
-</Link>
-            <p className="mt-5 text-white/70">
+            {/* White panel because the logo has a white background. */}
+            <Link
+              href="/"
+              aria-label="Hawkeye Vision home"
+              className="inline-block rounded-xl bg-white px-3 py-1.5 sm:px-3.5 sm:py-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            >
+              <span className="relative block aspect-[850/160] h-7 sm:h-8 md:h-9 overflow-hidden">
+                <Image
+                  src="/logo.png"
+                  alt="Hawkeye Vision – The Ultimate Destination for Surveillance Systems"
+                  fill
+                  sizes="(min-width: 768px) 200px, (min-width: 640px) 175px, 150px"
+                  className="object-cover object-[50%_57%]"
+                />
+              </span>
+            </Link>
+            <p className="mt-5 text-blue-100/80">
               CCTV wholesale distributor in Kochi, supplying and servicing
-              premium brands.
+              premium surveillance and IT security brands.
             </p>
           </div>
         </div>
@@ -72,8 +71,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-x-6 gap-y-12 py-12 md:grid-cols-3 md:gap-x-10 lg:grid-cols-[0.7fr_1fr_1fr_auto]">
           {/* Pages */}
           <nav aria-label="Footer">
-            <h2 className="text-lg font-semibold">Pages</h2>
-            <ul className="mt-5 space-y-3 text-white/70">
+            <h2 className="text-lg font-semibold text-white">Pages</h2>
+            <ul className="mt-5 space-y-3 text-blue-100/75">
               {NAV_LINKS.map(({ label, href }) => (
                 <li key={href}>
                   <Link href={href} className={linkClass}>
@@ -87,8 +86,8 @@ export default function Footer() {
           {/* Products, one column per segment */}
           {SEGMENTS.map((segment) => (
             <div key={segment.title}>
-              <h2 className="text-lg font-semibold">{segment.title}</h2>
-              <ul className="mt-5 space-y-3 text-white/70">
+              <h2 className="text-lg font-semibold text-white">{segment.title}</h2>
+              <ul className="mt-5 space-y-3 text-blue-100/75">
                 {segment.items.map((item) => (
                   <li key={item}>
                     <Link href="/products" className={linkClass}>
@@ -102,8 +101,8 @@ export default function Footer() {
 
           {/* Contact: full width on phones and tablets, own column on laptops */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
-            <h2 className="text-lg font-semibold">Contact</h2>
-            <address className="mt-5 space-y-6 not-italic text-white/70">
+            <h2 className="text-lg font-semibold text-white">Contact</h2>
+            <address className="mt-5 space-y-6 not-italic text-blue-100/75">
               <a
                 href={MAP_URL}
                 target="_blank"
@@ -118,9 +117,9 @@ export default function Footer() {
                 ))}
               </a>
 
-              <div className="divide-y divide-white/10 border-y border-white/10">
+              <div className="divide-y divide-white/15 border-y border-white/15">
                 <div className="flex flex-col gap-1 py-3 sm:flex-row sm:gap-4">
-                  <span className="w-12 shrink-0 text-white/50">Mob</span>
+                  <span className="w-12 shrink-0 text-blue-200/60">Mob</span>
                   <span className="flex flex-col gap-1">
                     {PHONES.map((p) => (
                       <a key={p.tel} href={`tel:${p.tel}`} className={linkClass}>
@@ -130,7 +129,7 @@ export default function Footer() {
                   </span>
                 </div>
                 <div className="flex flex-col gap-1 py-3 sm:flex-row sm:gap-4">
-                  <span className="w-12 shrink-0 text-white/50">Mail</span>
+                  <span className="w-12 shrink-0 text-blue-200/60">Mail</span>
                   <a
                     href={`mailto:${EMAIL}`}
                     className={`whitespace-nowrap text-[15px] sm:text-base ${linkClass}`}
@@ -143,7 +142,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 border-t border-white/10 pt-6 text-sm text-white/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 border-t border-white/15 pt-6 text-sm text-blue-200/60 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Hawkeye Vision. All rights reserved.</p>
           <p>Wholesale CCTV and surveillance systems, Kochi</p>
         </div>
