@@ -218,14 +218,14 @@ function RegisterForm() {
 
           <div className="relative z-10">
             {/* Logo container */}
-           <div className="inline-flex items-center rounded-2xl bg-white/10 px-5 py-3 backdrop-blur-md border border-white/15">
-  <span className="relative block h-12 w-48 overflow-hidden sm:h-14 sm:w-56">
+         <div className="inline-flex items-center rounded-2xl bg-white px-5 py-3 shadow-lg shadow-black/20">
+  <span className="relative block h-14 w-52 sm:h-16 sm:w-60">
     <Image
       src="/logo.png"
       alt="Hawkeye Vision"
       fill
       priority
-      sizes="(min-width: 640px) 224px, 192px"
+      sizes="(min-width: 640px) 240px, 208px"
       className="object-contain"
     />
   </span>
