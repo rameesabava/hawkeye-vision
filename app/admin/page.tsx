@@ -488,7 +488,6 @@ function AdminDashboardContent() {
               <span className="rounded-full bg-sky-400/20 px-3 py-1 text-xs font-bold text-sky-300 uppercase tracking-wider border border-sky-400/30">
                 Admin Console
               </span>
-              <span className="text-xs text-blue-200/70">MySQL Database</span>
             </div>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
               Hawkeye Vision Management
