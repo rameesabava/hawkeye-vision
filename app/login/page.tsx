@@ -73,17 +73,18 @@ function LoginForm() {
 
           <div className="relative z-10">
             {/* Logo container */}
-            <div className="inline-flex items-center rounded-2xl bg-white/10 px-4 py-2 backdrop-blur-md border border-white/15">
-              <span className="relative block h-7 w-32 overflow-hidden">
-                <Image
-                  src="/logo.png"
-                  alt="Hawkeye Vision"
-                  fill
-                  priority
-                  className="object-contain"
-                />
-              </span>
-            </div>
+           <div className="inline-flex items-center rounded-2xl bg-white/10 px-5 py-3 backdrop-blur-md border border-white/15">
+  <span className="relative block h-12 w-48 overflow-hidden sm:h-14 sm:w-56">
+    <Image
+      src="/logo.png"
+      alt="Hawkeye Vision"
+      fill
+      priority
+      sizes="(min-width: 640px) 224px, 192px"
+      className="object-contain"
+    />
+  </span>
+</div>
 
             <h2 className="mt-8 text-2xl font-bold tracking-tight sm:text-3xl">
               Surveillance & IT Solutions
