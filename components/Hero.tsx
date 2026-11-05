@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { Bricolage_Grotesque, Manrope } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 
-// Put your two clips in /public/videos/
+const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["600", "800"] });
+const body = Manrope({ subsets: ["latin"], weight: ["500", "700"] });
+
 const VIDEOS = ["/videos/hero-1.mp4", "/videos/hero-2.mp4"];
 
 export default function Hero() {
@@ -12,7 +15,6 @@ export default function Hero() {
 
   const next = () => setActive((i) => (i + 1) % VIDEOS.length);
 
-  // Play the active clip from the start; pause the other after it has faded out
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
     videoRefs.current.forEach((video, i) => {
@@ -28,11 +30,11 @@ export default function Hero() {
   }, [active]);
 
   return (
-    <section className="relative isolate min-h-[100svh] overflow-hidden bg-[#081F4D] text-white">
-      {/* Video carousel (cross-fades when a clip ends).
-          Phones show the whole frame (object-contain); larger screens fill the
-          section (object-cover). The text sits over the video on every screen. */}
-      <div className="absolute inset-0 -z-10 bg-[#081F4D]">
+    <section
+      className={`${body.className} relative isolate min-h-[100svh] overflow-hidden bg-[#06142F]`}
+    >
+      {/* Background video carousel */}
+      <div className="absolute inset-0 -z-20 bg-[#06142F]">
         {VIDEOS.map((src, i) => (
           <video
             key={src}
@@ -47,74 +49,64 @@ export default function Hero() {
             onEnded={i === active ? next : undefined}
             onError={i === active ? next : undefined}
             aria-hidden="true"
-            className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-1000 md:object-cover ${
+            className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-1000 motion-reduce:transition-none md:object-cover ${
               i === active ? "opacity-100" : "opacity-0"
             }`}
           />
         ))}
       </div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#081F4D]/90 via-[#0A2660]/75 to-[#081F4D]/95" />
 
-      {/* Text */}
-      <div className="mx-auto flex min-h-[100svh] max-w-5xl flex-col items-center justify-center px-6 pb-28 pt-32 text-center md:pt-36">
-        <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-sky-200 backdrop-blur-md sm:px-5 sm:py-2.5 sm:text-sm">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-            className="shrink-0 text-sky-300"
-          >
-            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
-            <circle cx="12" cy="12" r="3" />
-          </svg>
-          CCTV wholesale distributor in Kochi
-        </span>
+      {/* Overlays: even tint, plus depth toward the bottom-left where the text sits */}
+      <div className="absolute inset-0 -z-10 bg-[#06142F]/30" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#06142F] via-[#06142F]/55 to-transparent" />
+      <div className="absolute inset-0 -z-10 hidden bg-gradient-to-r from-[#06142F]/80 via-[#06142F]/20 to-transparent md:block" />
 
-        <h1 className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-white sm:mt-8 sm:text-6xl md:text-7xl">
-          Premium Surveillance Systems, Wholesale From Kochi
-        </h1>
+      <div className="mx-auto flex min-h-[100svh] w-full max-w-7xl flex-col px-6 py-8 md:px-12 md:py-10">
+       
 
-        <p className="mt-6 max-w-2xl text-base text-blue-100/90 sm:mt-8 sm:text-lg">
-          Hawkeye Vision deals with almost all premium brands including
-          Hikvision, CP Plus, TP Link, Toshiba, WD and many more.
-        </p>
+        {/* Headline block */}
+        <div className="flex flex-1 flex-col justify-end pb-4 md:pb-8">
+          <span className="mb-6 block h-1 w-14 rounded-full bg-sky-400" />
 
-        <div className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:gap-4">
-          <Link
-            href="/products"
-            className="w-full rounded-full bg-white px-8 py-4 text-sm font-semibold text-[#081F4D] shadow-[0_10px_30px_rgba(8,31,77,0.35)] transition hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:w-auto"
-          >
-            View products
-          </Link>
-          <Link
-            href="/contact"
-            className="w-full rounded-full border border-white/40 px-8 py-4 text-sm font-semibold text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:w-auto"
-          >
-            Contact us
-          </Link>
+         <h1
+  className={`${display.className} max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl lg:text-5xl`}
+>
+  The ultimate destination for surveillance systems
+</h1>
+
+          <p className="mt-5 max-w-md text-base leading-relaxed text-white/80 sm:text-lg">
+            Wholesale distributor
+          </p>
+
+          <div className="mt-8 flex items-center justify-between gap-6">
+            <Link
+              href="/contact"
+              className="inline-flex w-full items-center justify-center rounded-full bg-sky-400 px-8 py-3.5 text-sm font-bold text-[#06142F] shadow-lg shadow-sky-400/25 transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:w-auto"
+            >
+              Contact us
+            </Link>
+
+            {/* Video selector */}
+            <div className="hidden items-center gap-2 sm:flex" role="group" aria-label="Background video">
+              {VIDEOS.map((src, i) => (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => setActive(i)}
+                  aria-label={`Show video ${i + 1}`}
+                  aria-current={i === active}
+                  className="group py-3"
+                >
+                  <span
+                    className={`block h-1 rounded-full transition-all duration-500 ${
+                      i === active ? "w-12 bg-sky-400" : "w-6 bg-white/40 group-hover:bg-white/70"
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Carousel indicators */}
-      <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-3">
-        {VIDEOS.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => setActive(i)}
-            aria-label={`Show video ${i + 1}`}
-            aria-current={i === active}
-            className={`h-1.5 w-10 rounded-full transition-colors ${
-              i === active ? "bg-sky-400" : "bg-white/30 hover:bg-white/50"
-            }`}
-          />
-        ))}
       </div>
     </section>
   );

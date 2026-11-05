@@ -106,7 +106,7 @@ function Hero() {
         </motion.div>
 
         <div className="mt-6 max-w-5xl">
-          <HeroHeadline text="Surveillance systems, supplied and serviced from Kochi" />
+          <HeroHeadline text="Surveillance systems, supplied and serviced" />
         </div>
 
         <motion.p
