@@ -24,7 +24,7 @@ export default function ProtectedRoute({
   useEffect(() => {
     if (loading) return;
 
-    if (!token || !user) {
+    if (!(token || typeof window !== "undefined" && localStorage.getItem("hawkeye_token")) || !user) {
       if (!redirectedRef.current) {
         redirectedRef.current = true;
         toast.error("Authentication required", {
@@ -63,7 +63,7 @@ export default function ProtectedRoute({
     );
   }
 
-  if (!token || !user) {
+  if (!(token || typeof window !== "undefined" && localStorage.getItem("hawkeye_token")) || !user) {
     return null;
   }
 

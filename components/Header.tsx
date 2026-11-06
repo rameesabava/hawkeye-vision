@@ -20,7 +20,7 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
-const { user, cartCount, logout, loading: authLoading } = useAuth();
+const { user, token, cartCount, logout, loading: authLoading } = useAuth();
 
   // Close menus whenever route changes
   useEffect(() => {
@@ -33,17 +33,21 @@ const { user, cartCount, logout, loading: authLoading } = useAuth();
 
  const handleCartClick = (e: React.MouseEvent) => {
   if (authLoading) {
-    // auth still hydrating: let the click through, ProtectedRoute will decide
+    // Still loading authentication state; prevent navigation.
+    e.preventDefault();
     return;
   }
-  if (!user) {
+  // Use token or user presence to determine login status.
+  if (!token && !user) {
     e.preventDefault();
     toast.error("Please sign in to view your cart.", {
       description: "Log in with your account to view your cart and place orders.",
     });
     router.push("/login?redirect=/cart");
   }
-};
+}
+
+
 
   return (
     <header className="fixed inset-x-0 top-3 z-50 px-3 sm:px-4">
@@ -217,11 +221,15 @@ const { user, cartCount, logout, loading: authLoading } = useAuth();
                     <button
                       type="button"
                       onClick={() => {
-                        logout();
-                        setUserDropdown(false);
-                        toast.info("Logged out successfully.");
-                        router.push('/login');
-                      }}
+                      logout();
+                      setUserDropdown(false);
+                      toast.info("Logged out successfully.");
+                      // Set a flag so ProtectedRoute knows this is a direct logout
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem('postLogout', 'true');
+                      }
+                      router.push('/login');
+                    }}
                       className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50"
                     >
                       <svg
