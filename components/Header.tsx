@@ -43,7 +43,7 @@ const { user, token, cartCount, logout, loading: authLoading } = useAuth();
     toast.error("Please sign in to view your cart.", {
       description: "Log in with your account to view your cart and place orders.",
     });
-    router.push("/login?redirect=/cart");
+    router.push("/login");
   }
 }
 

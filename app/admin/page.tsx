@@ -124,7 +124,7 @@ function AdminDashboardContent() {
     } finally {
       setProductsLoading(false);
     }
-  };
+
 
   const fetchOrders = async () => {
     if (user?.role !== "admin") return;
@@ -137,7 +137,7 @@ function AdminDashboardContent() {
     } finally {
       setOrdersLoading(false);
     }
-  };
+
 
   const fetchUsers = async () => {
     if (user?.role !== "admin") return;
@@ -150,7 +150,7 @@ function AdminDashboardContent() {
     } finally {
       setUsersLoading(false);
     }
-  };
+
 
   // Fetch all dashboard data initially so all stats reflect actual numbers immediately
   useEffect(() => {
@@ -184,7 +184,7 @@ function AdminDashboardContent() {
     setPImagePreview(null);
     setProductFormError(null);
     setProductModalOpen(true);
-  };
+
 
   // Open modal for Editing existing product
   const handleOpenEditModal = (p: Product) => {
@@ -200,7 +200,7 @@ function AdminDashboardContent() {
     setPImagePreview(getImageUrl(p.image));
     setProductFormError(null);
     setProductModalOpen(true);
-  };
+
 
   // Handle product form submission (Create or Update)
   const handleProductSubmit = async (e: React.FormEvent) => {
@@ -250,7 +250,7 @@ function AdminDashboardContent() {
     } finally {
       setProductSubmitting(false);
     }
-  };
+
 
   // Delete product
   const handleDeleteProduct = async (id: number) => {
@@ -263,7 +263,7 @@ function AdminDashboardContent() {
       const error = err as Error;
       toast.error(error.message || "Failed to delete product.");
     }
-  };
+
 
   // Update order status (Shipped / Delivered)
   const handleUpdateOrderStatus = async (orderId: number, status: "Shipped" | "Delivered") => {
@@ -278,7 +278,7 @@ function AdminDashboardContent() {
     } finally {
       setUpdatingOrderId(null);
     }
-  };
+
 
   // Delete user
   const handleDeleteUser = async (userId: number) => {
@@ -294,7 +294,7 @@ function AdminDashboardContent() {
     } finally {
       setDeletingUserId(null);
     }
-  };
+
 
   if (authLoading || !user || user.role !== "admin") {
     return (
@@ -385,102 +385,111 @@ function AdminDashboardContent() {
 
   // Reusable order card renderer
   const renderOrderCard = (o: Order) => {
-    const items: OrderItem[] = Array.isArray(o.items_json)
-      ? o.items_json
-      : typeof o.items_json === "string"
-      ? JSON.parse(o.items_json)
-      : [];
+  const items: OrderItem[] = Array.isArray(o.items_json)
+    ? o.items_json
+    : typeof o.items_json === "string"
+    ? JSON.parse(o.items_json)
+    : [];
 
-    return (
-      <div
-        key={o.id}
-        className="rounded-3xl border border-blue-100 bg-white p-6 shadow-md transition hover:shadow-lg text-slate-900"
-      >
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="font-extrabold text-[#081F4D] text-base">Order #{o.id}</span>
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-bold ${
-                  o.order_status === "Placed"
-                    ? "bg-amber-50 text-amber-700 border border-amber-200"
-                    : o.order_status === "Shipped"
-                    ? "bg-sky-50 text-sky-700 border border-sky-200"
-                    : o.order_status === "Delivered"
-                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                    : "bg-red-50 text-red-700 border border-red-200"
-                }`}
-              >
-                ● {o.order_status}
-              </span>
-            </div>
-            <div className="mt-1 text-xs text-slate-600">
-              Customer: <strong className="text-slate-900">{o.username}</strong> ({o.user_email}) • Phone:{" "}
-              <strong className="text-slate-900">{o.phone}</strong>
-            </div>
-          </div>
-
-          <div className="text-left sm:text-right">
-            <div className="text-lg font-black text-[#081F4D]">
-              ₹{(parseFloat(String(o.total_amount)) || 0).toLocaleString("en-IN")}
-            </div>
-            <div className="text-[11px] font-medium text-slate-500">
-              {new Date(o.created_at).toLocaleDateString("en-IN", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Items */}
-        <div className="mt-4 flex flex-wrap gap-2 text-xs">
-          {items.map((it, idx) => (
+  return (
+    <div
+      key={o.id}
+      className="rounded-3xl border border-blue-100 bg-white p-6 shadow-md transition hover:shadow-lg text-slate-900"
+    >
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4">
+        <div>
+          <div className="flex items-center gap-3">
+            <span className="font-extrabold text-[#081F4D] text-base">Order #{o.id}</span>
             <span
-              key={idx}
-              className="rounded-xl bg-blue-50/80 px-3 py-1.5 font-semibold text-[#081F4D] border border-blue-100"
+              className={`rounded-full px-3 py-1 text-xs font-bold ${
+                o.order_status === "Placed"
+                  ? "bg-amber-50 text-amber-700 border border-amber-200"
+                  : o.order_status === "Shipped"
+                  ? "bg-sky-50 text-sky-700 border border-sky-200"
+                  : o.order_status === "Delivered"
+                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                  : "bg-red-50 text-red-700 border border-red-200"
+              }`}
             >
-              {it.name} ({it.model}) × {it.quantity}
+              ● {o.order_status}
             </span>
-          ))}
+          </div>
+          <div className="mt-1 text-xs text-slate-600">
+            Customer: <strong className="text-slate-900">{o.username}</strong> ({o.user_email}) • Phone:{" "}
+            <strong className="text-slate-900">{o.phone}</strong>
+          </div>
         </div>
 
-        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs text-slate-600 pt-3 border-t border-slate-100">
-          <div>
-            <span className="font-bold text-slate-800">Shipping Address:</span> {o.address}
+        <div className="text-left sm:text-right">
+          <div className="text-lg font-black text-[#081F4D]">
+            ₹{(parseFloat(String(o.total_amount)) || 0).toLocaleString("en-IN")}
           </div>
-
-          {/* Status update buttons */}
-          <div className="flex items-center gap-2">
-            {o.order_status === "Placed" && (
-              <button
-                type="button"
-                onClick={() => handleUpdateOrderStatus(o.id, "Shipped")}
-                disabled={updatingOrderId === o.id}
-                className="rounded-full bg-sky-600 px-4 py-1.5 text-xs font-bold text-white transition hover:bg-sky-500 shadow-sm"
-              >
-                Mark as Shipped
-              </button>
-            )}
-
-            {o.order_status === "Shipped" && (
-              <button
-                type="button"
-                onClick={() => handleUpdateOrderStatus(o.id, "Delivered")}
-                disabled={updatingOrderId === o.id}
-                className="rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-500 shadow-sm"
-              >
-                Mark as Delivered
-              </button>
-            )}
+          <div className="text-[11px] font-medium text-slate-500">
+            {new Date(o.created_at).toLocaleDateString("en-IN", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </div>
         </div>
       </div>
-    );
-  };
+
+      {/* Items */}
+      <div className="mt-4 flex flex-wrap gap-2 text-xs">
+        {items.map((it, idx) => (
+          <span
+            key={idx}
+            className="rounded-xl bg-blue-50/80 px-3 py-1.5 font-semibold text-[#081F4D] border border-blue-100"
+          >
+            {it.name} ({it.model}) × {it.quantity}
+          </span>
+        ))}
+      </div>
+
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs text-slate-600 pt-3 border-t border-slate-100">
+        <div>
+          <span className="font-bold text-slate-800">Shipping Address:</span> {o.address}
+        </div>
+
+        {/* Status update buttons */}
+        <div className="flex items-center gap-2">
+          {o.order_status === "Placed" && (
+            <button
+              type="button"
+              onClick={() => handleUpdateOrderStatus(o.id, "Shipped")}
+              disabled={updatingOrderId === o.id}
+              className="rounded-full bg-sky-600 px-4 py-1.5 text-xs font-bold text-white transition hover:bg-sky-500 shadow-sm"
+            >
+              Mark as Shipped
+            </button>
+          )}
+
+          {o.order_status === "Shipped" && (
+            <button
+              type="button"
+              onClick={() => handleUpdateOrderStatus(o.id, "Delivered")}
+              disabled={updatingOrderId === o.id}
+              className="rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-500 shadow-sm"
+            >
+              Mark as Delivered
+            </button>
+          )}
+          {/* View Details Link */}
+          <Link
+            href={`/admin/orders/${o.id}`}
+            className="rounded-full bg-gray-200 px-4 py-1.5 text-xs font-bold text-gray-800 hover:bg-gray-300"
+          >
+            View Details
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#081F4D] via-[#0A2660] to-[#071838] px-4 pt-32 pb-24 text-white sm:px-6 sm:pt-40 md:pt-48">

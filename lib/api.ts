@@ -139,6 +139,16 @@ async function handleResponse<T>(res: Response, fallbackMessage: string): Promis
 }
 
 export const api = {
+  // Existing methods ...
+  // Admin order details
+  async getOrderById(id: string | number, token?: string) {
+    const res = await fetch(`${API_BASE_URL}/order/${id}`, {
+      headers: getAuthHeaders(token),
+      cache: "no-store",
+    });
+    return handleResponse<Order>(res, "Failed to fetch order details");
+  },
+
   // Auth
   async login(credentials: { email: string; password: string }) {
     const res = await fetch(`${API_BASE_URL}/login`, {
