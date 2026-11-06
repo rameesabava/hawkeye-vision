@@ -218,6 +218,7 @@ const { user, cartCount, logout, loading: authLoading } = useAuth();
                         logout();
                         setUserDropdown(false);
                         toast.info("Logged out successfully.");
+                        router.push('/login');
                       }}
                       className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50"
                     >
