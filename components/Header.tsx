@@ -20,7 +20,7 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
-  const { user, cartCount, logout } = useAuth();
+const { user, cartCount, logout, loading: authLoading } = useAuth();
 
   // Close menus whenever route changes
   useEffect(() => {
@@ -31,19 +31,19 @@ export default function Header() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  const handleCartClick = (e: React.MouseEvent) => {
-    if (!user) {
-      e.preventDefault();
-      toast.error("Please sign in to view your cart.", {
-        description: "Log in with your account to view your cart and place orders.",
-        action: {
-          label: "Sign In",
-          onClick: () => router.push("/login?redirect=/cart"),
-        },
-      });
-      router.push("/login?redirect=/cart");
-    }
-  };
+ const handleCartClick = (e: React.MouseEvent) => {
+  if (authLoading) {
+    // auth still hydrating: let the click through, ProtectedRoute will decide
+    return;
+  }
+  if (!user) {
+    e.preventDefault();
+    toast.error("Please sign in to view your cart.", {
+      description: "Log in with your account to view your cart and place orders.",
+    });
+    router.push("/login?redirect=/cart");
+  }
+};
 
   return (
     <header className="fixed inset-x-0 top-3 z-50 px-3 sm:px-4">

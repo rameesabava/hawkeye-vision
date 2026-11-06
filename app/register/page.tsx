@@ -20,6 +20,8 @@ function RegisterForm() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,17 +33,23 @@ function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username.trim() || !email.trim() || !phone.trim() || !password) {
-      toast.warning("Please fill in all required registration fields.");
-      setError("Please fill in all required fields.");
-      return;
-    }
+    if (!username.trim() || !email.trim() || !phone.trim() || !password || !confirmPassword) {
+  toast.warning("Please fill in all required registration fields.");
+  setError("Please fill in all required fields.");
+  return;
+}
 
-    if (password.length < 6) {
-      toast.warning("Password must be at least 6 characters long.");
-      setError("Password must be at least 6 characters long.");
-      return;
-    }
+if (password.length < 6) {
+  toast.warning("Password must be at least 6 characters long.");
+  setError("Password must be at least 6 characters long.");
+  return;
+}
+
+if (password !== confirmPassword) {
+  toast.warning("Passwords do not match.");
+  setError("Passwords do not match.");
+  return;
+}
 
     try {
       setLoading(true);
@@ -183,6 +191,51 @@ function RegisterForm() {
                 </button>
               </div>
             </div>
+            <div>
+  <label
+    htmlFor="confirmPassword"
+    className="block text-xs font-semibold uppercase tracking-wider text-neutral-700"
+  >
+    Confirm Password
+  </label>
+  <div className="relative mt-1.5">
+    <input
+      id="confirmPassword"
+      type={showConfirmPassword ? "text" : "password"}
+      required
+      autoComplete="new-password"
+      placeholder="Re-enter your password"
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+      className={`w-full rounded-2xl border bg-slate-50/50 py-3 pl-4 pr-11 text-sm text-neutral-900 placeholder-neutral-400 transition focus:bg-white focus:outline-none focus:ring-4 ${
+        confirmPassword && password !== confirmPassword
+          ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+          : "border-neutral-200 focus:border-[#081F4D] focus:ring-blue-100"
+      }`}
+    />
+    <button
+      type="button"
+      onClick={() => setShowConfirmPassword((prev) => !prev)}
+      className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 transition hover:text-[#081F4D]"
+      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+    >
+      {showConfirmPassword ? (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+          <line x1="1" y1="1" x2="23" y2="23" />
+        </svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      )}
+    </button>
+  </div>
+  {confirmPassword && password !== confirmPassword && (
+    <p className="mt-1.5 text-xs text-red-500">Passwords do not match.</p>
+  )}
+</div>
 
             <button
               type="submit"
@@ -218,18 +271,18 @@ function RegisterForm() {
 
           <div className="relative z-10">
             {/* Logo container */}
-         <div className="inline-flex items-center rounded-2xl bg-white px-5 py-3 shadow-lg shadow-black/20">
-  <span className="relative block h-14 w-52 sm:h-16 sm:w-60">
-    <Image
-      src="/logo.png"
-      alt="Hawkeye Vision"
-      fill
-      priority
-      sizes="(min-width: 640px) 240px, 208px"
-      className="object-contain"
-    />
-  </span>
-</div>
+            <div className="inline-flex items-center rounded-2xl bg-white px-5 py-3 shadow-lg shadow-black/20">
+              <span className="relative block h-14 w-52 sm:h-16 sm:w-60">
+                <Image
+                  src="/logo.png"
+                  alt="Hawkeye Vision"
+                  fill
+                  priority
+                  sizes="(min-width: 640px) 240px, 208px"
+                  className="object-contain"
+                />
+              </span>
+            </div>
 
             <h2 className="mt-8 text-2xl font-bold tracking-tight sm:text-3xl">
               Join Our Wholesale Network

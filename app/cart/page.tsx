@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,15 +9,16 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
-export default function CartPage() {
+function CartContent() {
   const router = useRouter();
   const { user, token, refreshCartCount } = useAuth();
+  const authToken = token ?? undefined;
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<number | null>(null);
 
-  // Checkout modal / section state
+  // Checkout state
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [shippingName, setShippingName] = useState("");
   const [shippingPhone, setShippingPhone] = useState("");
@@ -26,29 +27,25 @@ export default function CartPage() {
   const [placingOrder, setPlacingOrder] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
-  const fetchCart = async () => {
-    try {
-      setLoading(true);
-      const items = await api.getCart();
-      setCartItems(items);
-    } catch (err) {
-      console.error("Failed to fetch cart:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchCart = useCallback(
+    async (showSkeleton = true) => {
+      try {
+        if (showSkeleton) setLoading(true);
+        const items = await api.getCart(authToken);
+        setCartItems(items);
+      } catch (err) {
+        console.error("Failed to fetch cart:", err);
+        toast.error("Could not load your cart. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [authToken]
+  );
 
   useEffect(() => {
-    if (!token && !loading) {
-      toast.error("Please sign in to access your cart.", {
-        description: "You must be signed in to review items and place orders.",
-      });
-      router.push("/login?redirect=/cart");
-      return;
-    }
     fetchCart();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, [fetchCart]);
 
   useEffect(() => {
     if (user) {
@@ -60,8 +57,8 @@ export default function CartPage() {
   const handleIncrement = async (cartId: number) => {
     try {
       setUpdatingId(cartId);
-      await api.incrementCart(cartId);
-      await fetchCart();
+      await api.incrementCart(cartId, authToken);
+      await fetchCart(false);
       await refreshCartCount();
       toast.success("Cart quantity increased.");
     } catch {
@@ -74,8 +71,8 @@ export default function CartPage() {
   const handleDecrement = async (cartId: number) => {
     try {
       setUpdatingId(cartId);
-      await api.decrementCart(cartId);
-      await fetchCart();
+      await api.decrementCart(cartId, authToken);
+      await fetchCart(false);
       await refreshCartCount();
       toast.success("Cart quantity updated.");
     } catch {
@@ -88,8 +85,8 @@ export default function CartPage() {
   const handleRemove = async (cartId: number) => {
     try {
       setUpdatingId(cartId);
-      await api.removeCartItem(cartId);
-      await fetchCart();
+      await api.removeCartItem(cartId, authToken);
+      await fetchCart(false);
       await refreshCartCount();
       toast.info("Item removed from cart.");
     } catch {
@@ -103,8 +100,8 @@ export default function CartPage() {
     if (!confirm("Are you sure you want to clear your cart?")) return;
     try {
       setLoading(true);
-      await api.clearCart();
-      await fetchCart();
+      await api.clearCart(authToken);
+      await fetchCart(false);
       await refreshCartCount();
       toast.info("Shopping cart cleared.");
     } catch {
@@ -141,14 +138,17 @@ export default function CartPage() {
         image: c.image,
       }));
 
-      await api.createOrder({
-        username: shippingName || user?.username || "Customer",
-        phone: shippingPhone,
-        address: shippingAddress.trim(),
-        paymentMethod,
-        items: orderItems,
-        totalAmount: subtotal,
-      });
+      await api.createOrder(
+        {
+          username: shippingName || user?.username || "Customer",
+          phone: shippingPhone,
+          address: shippingAddress.trim(),
+          paymentMethod,
+          items: orderItems,
+          totalAmount: subtotal,
+        },
+        authToken
+      );
 
       await refreshCartCount();
       toast.success("Order placed successfully! Thank you for ordering with Hawkeye Vision.");
@@ -175,12 +175,11 @@ export default function CartPage() {
   }
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-slate-50 px-4 pt-32 pb-24 text-slate-900 sm:px-6 sm:pt-40 md:pt-48">
+    <div className="min-h-screen bg-slate-50 px-4 pt-32 pb-24 text-slate-900 sm:px-6 sm:pt-40 md:pt-48">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="inline-block rounded-full bg-blue-100/70 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#081F4D] mb-2">
+            <div className="mb-2 inline-block rounded-full bg-blue-100/70 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#081F4D]">
               Wholesale Cart
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-[#081F4D] sm:text-4xl">
@@ -195,7 +194,7 @@ export default function CartPage() {
             <button
               type="button"
               onClick={handleClearCart}
-              className="text-xs font-bold text-red-500 hover:text-red-700 transition"
+              className="text-xs font-bold text-red-500 transition hover:text-red-700"
             >
               Clear Cart
             </button>
@@ -207,15 +206,13 @@ export default function CartPage() {
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-2xl text-[#081F4D]">
               🛒
             </div>
-            <h2 className="mt-4 text-xl font-bold text-[#081F4D]">
-              Your cart is empty
-            </h2>
+            <h2 className="mt-4 text-xl font-bold text-[#081F4D]">Your cart is empty</h2>
             <p className="mt-2 text-sm text-slate-500">
               Browse our CCTV cameras, DVR, NVR, hard disks and network switches.
             </p>
             <Link
               href="/products"
-              className="mt-6 inline-block rounded-full bg-[#081F4D] px-8 py-3 text-sm font-bold text-white transition hover:bg-[#0A2660] shadow-md"
+              className="mt-6 inline-block rounded-full bg-[#081F4D] px-8 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#0A2660]"
             >
               Browse Catalogue
             </Link>
@@ -231,10 +228,9 @@ export default function CartPage() {
                 return (
                   <div
                     key={item.cart_id}
-                    className="flex flex-col gap-4 rounded-3xl border border-blue-100 bg-white p-4 sm:flex-row sm:items-center sm:p-5 shadow-[0_8px_25px_rgba(8,31,77,0.05)] transition hover:border-blue-200"
+                    className="flex flex-col gap-4 rounded-3xl border border-blue-100 bg-white p-4 shadow-[0_8px_25px_rgba(8,31,77,0.05)] transition hover:border-blue-200 sm:flex-row sm:items-center sm:p-5"
                   >
-                    {/* Item Image */}
-                    <div className="relative aspect-square h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-slate-50 border border-slate-100 p-2 sm:h-24 sm:w-24">
+                    <div className="relative aspect-square h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 p-2 sm:h-24 sm:w-24">
                       <Image
                         src={imageUrl}
                         alt={item.name}
@@ -244,36 +240,30 @@ export default function CartPage() {
                       />
                     </div>
 
-                    {/* Details */}
-                    <div className="flex-1 min-w-0">
+                    <div className="min-w-0 flex-1">
                       <div className="text-[11px] font-bold uppercase tracking-wider text-sky-600">
                         {item.brand} • {item.model}
                       </div>
                       <Link
                         href={`/products/${item.product_id}`}
-                        className="truncate block text-base font-bold text-[#081F4D] hover:underline"
+                        className="block truncate text-base font-bold text-[#081F4D] hover:underline"
                       >
                         {item.name}
                       </Link>
-                      <div className="mt-1 text-xs text-slate-500">
-                        {item.category}
-                      </div>
+                      <div className="mt-1 text-xs text-slate-500">{item.category}</div>
                       <div className="mt-2 text-sm font-bold text-[#081F4D]">
                         ₹{(parseFloat(String(item.price)) || 0).toLocaleString("en-IN")}{" "}
-                        <span className="text-xs font-normal text-slate-400">
-                          each
-                        </span>
+                        <span className="text-xs font-normal text-slate-400">each</span>
                       </div>
                     </div>
 
-                    {/* Quantity Controls & Remove */}
                     <div className="flex items-center justify-between sm:flex-col sm:items-end sm:gap-3">
                       <div className="flex items-center rounded-full border border-blue-200 bg-blue-50/70 px-3 py-1">
                         <button
                           type="button"
                           onClick={() => handleDecrement(item.cart_id)}
                           disabled={updatingId === item.cart_id}
-                          className="px-1 text-sm font-bold text-[#081F4D] hover:text-blue-700"
+                          className="px-1 text-sm font-bold text-[#081F4D] hover:text-blue-700 disabled:opacity-50"
                         >
                           −
                         </button>
@@ -284,7 +274,7 @@ export default function CartPage() {
                           type="button"
                           onClick={() => handleIncrement(item.cart_id)}
                           disabled={updatingId === item.cart_id}
-                          className="px-1 text-sm font-bold text-[#081F4D] hover:text-blue-700"
+                          className="px-1 text-sm font-bold text-[#081F4D] hover:text-blue-700 disabled:opacity-50"
                         >
                           +
                         </button>
@@ -298,7 +288,7 @@ export default function CartPage() {
                           type="button"
                           onClick={() => handleRemove(item.cart_id)}
                           disabled={updatingId === item.cart_id}
-                          className="mt-1 text-xs font-semibold text-red-500 hover:text-red-700"
+                          className="mt-1 text-xs font-semibold text-red-500 hover:text-red-700 disabled:opacity-50"
                         >
                           Remove
                         </button>
@@ -310,29 +300,21 @@ export default function CartPage() {
             </div>
 
             {/* Order Summary Card */}
-            <div className="h-fit rounded-3xl bg-gradient-to-br from-[#081F4D] via-[#0A2660] to-[#081F4D] p-6 text-white shadow-xl sm:p-7 border border-blue-900">
-              <h2 className="text-lg font-bold text-white">
-                Order Summary
-              </h2>
+            <div className="h-fit rounded-3xl border border-blue-900 bg-gradient-to-br from-[#081F4D] via-[#0A2660] to-[#081F4D] p-6 text-white shadow-xl sm:p-7">
+              <h2 className="text-lg font-bold text-white">Order Summary</h2>
 
               <div className="mt-6 space-y-3 border-b border-white/15 pb-4 text-sm text-blue-100">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-bold text-white">
-                    ₹{subtotal.toLocaleString("en-IN")}
-                  </span>
+                  <span className="font-bold text-white">₹{subtotal.toLocaleString("en-IN")}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>GST / Taxes</span>
-                  <span className="text-xs text-sky-300 font-semibold">
-                    Included
-                  </span>
+                  <span className="text-xs font-semibold text-sky-300">Included</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Delivery</span>
-                  <span className="text-xs text-sky-300 font-semibold">
-                    Free Wholesale Shipping
-                  </span>
+                  <span className="text-xs font-semibold text-sky-300">Free Wholesale Shipping</span>
                 </div>
               </div>
 
@@ -347,15 +329,13 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={() => setIsCheckingOut(true)}
-                  className="mt-6 w-full rounded-full bg-white py-3.5 text-center text-sm font-bold text-[#081F4D] transition hover:bg-blue-50 shadow-md"
+                  className="mt-6 w-full rounded-full bg-white py-3.5 text-center text-sm font-bold text-[#081F4D] shadow-md transition hover:bg-blue-50"
                 >
                   Proceed to Checkout
                 </button>
               ) : (
                 <div className="mt-6 border-t border-white/15 pt-6">
-                  <h3 className="text-sm font-bold text-white">
-                    Delivery & Contact Details
-                  </h3>
+                  <h3 className="text-sm font-bold text-white">Delivery & Contact Details</h3>
 
                   {checkoutError && (
                     <div className="mt-3 rounded-xl border border-red-400/30 bg-red-500/20 p-3 text-xs text-red-200">
@@ -414,7 +394,9 @@ export default function CartPage() {
                         onChange={(e) => setPaymentMethod(e.target.value)}
                         className="mt-1 w-full rounded-xl border border-white/20 bg-[#0A2660] px-3 py-2 text-xs text-white focus:border-white focus:outline-none"
                       >
-                        <option value="Cash on Delivery" className="bg-[#081F4D] text-white">Cash on Delivery</option>
+                        <option value="Cash on Delivery" className="bg-[#081F4D] text-white">
+                          Cash on Delivery
+                        </option>
                         <option value="UPI / Online on Delivery" className="bg-[#081F4D] text-white">
                           UPI / QR on Delivery
                         </option>
@@ -427,7 +409,7 @@ export default function CartPage() {
                     <button
                       type="submit"
                       disabled={placingOrder}
-                      className="mt-4 w-full rounded-full bg-white py-3.5 text-center text-sm font-bold text-[#081F4D] transition hover:bg-blue-50 disabled:opacity-50 shadow-md"
+                      className="mt-4 w-full rounded-full bg-white py-3.5 text-center text-sm font-bold text-[#081F4D] shadow-md transition hover:bg-blue-50 disabled:opacity-50"
                     >
                       {placingOrder ? "Placing Order..." : "Confirm & Place Order"}
                     </button>
@@ -435,7 +417,7 @@ export default function CartPage() {
                     <button
                       type="button"
                       onClick={() => setIsCheckingOut(false)}
-                      className="w-full text-center text-xs font-semibold text-blue-200 hover:text-white pt-1"
+                      className="w-full pt-1 text-center text-xs font-semibold text-blue-200 hover:text-white"
                     >
                       Back to Summary
                     </button>
@@ -447,7 +429,13 @@ export default function CartPage() {
         )}
       </div>
     </div>
-    </ProtectedRoute>
   );
 }
 
+export default function CartPage() {
+  return (
+    <ProtectedRoute>
+      <CartContent />
+    </ProtectedRoute>
+  );
+}
