@@ -113,6 +113,8 @@ function AdminDashboardContent() {
 
   // Load data based on active tab
   const fetchProducts = async () => {
+    if (user?.role !== "admin") return;
+
     try {
       setProductsLoading(true);
       const data = await api.getAllProducts();
@@ -125,6 +127,7 @@ function AdminDashboardContent() {
   };
 
   const fetchOrders = async () => {
+    if (user?.role !== "admin") return;
     try {
       setOrdersLoading(true);
       const data = await api.getAllOrders();
@@ -137,6 +140,7 @@ function AdminDashboardContent() {
   };
 
   const fetchUsers = async () => {
+    if (user?.role !== "admin") return;
     try {
       setUsersLoading(true);
       const data = await api.getAllUsers();

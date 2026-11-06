@@ -91,31 +91,33 @@ const { user, cartCount, logout, loading: authLoading } = useAuth();
             ))}
 
             {/* Cart Icon Link */}
-            <Link
-              href="/cart"
-              onClick={handleCartClick}
-              aria-label="Cart"
-              className="relative shrink-0 flex items-center p-1.5 md:p-2 text-slate-700 transition hover:text-[#081F4D]"
-            >
-              <svg
-                className="h-5 w-5 md:h-6 md:w-6 transition-transform hover:scale-105"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="8" cy="21" r="1" />
-                <circle cx="19" cy="21" r="1" />
-                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-              </svg>
-              {cartCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-[16px] md:h-5 md:min-w-[20px] items-center justify-center rounded-full bg-[#081F4D] px-1 text-[10px] md:text-xs font-bold text-white shadow-sm">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
+            {user?.role !== 'admin' && (
+  <Link
+    href="/cart"
+    onClick={handleCartClick}
+    aria-label="Cart"
+    className="relative shrink-0 flex items-center p-1.5 md:p-2 text-slate-700 transition hover:text-[#081F4D]"
+  >
+    <svg
+      className="h-5 w-5 md:h-6 md:w-6 transition-transform hover:scale-105"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="8" cy="21" r="1" />
+      <circle cx="19" cy="21" r="1" />
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </svg>
+    {cartCount > 0 && (
+      <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-[16px] md:h-5 md:min-w-[20px] items-center justify-center rounded-full bg-[#081F4D] px-1 text-[10px] md:text-xs font-bold text-white shadow-sm">
+        {cartCount}
+      </span>
+    )}
+  </Link>
+)}
 
             {/* Auth section */}
             {user ? (

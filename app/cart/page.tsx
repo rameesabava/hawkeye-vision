@@ -400,9 +400,7 @@ function CartContent() {
                         <option value="UPI / Online on Delivery" className="bg-[#081F4D] text-white">
                           UPI / QR on Delivery
                         </option>
-                        <option value="NEFT / Bank Transfer" className="bg-[#081F4D] text-white">
-                          Direct Bank Transfer / NEFT
-                        </option>
+                        
                       </select>
                     </div>
 
