@@ -63,11 +63,13 @@ const base =
 const ok = "border-blue-200 focus:border-[#081F4D] focus:ring-[#081F4D]/15";
 const bad = "border-red-500 focus:border-red-600 focus:ring-red-200";
 
-export default function ContactForm({ email }: { email: string }) {
-  const [values, setValues] = useState<Values>(EMPTY);
+export default function ContactForm() {
+      const [values, setValues] = useState<Values>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof Values, boolean>>>({});
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+const [serverError, setServerError] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
   const reduce = useReducedMotion() ?? false;
 
@@ -83,35 +85,76 @@ export default function ContactForm({ email }: { email: string }) {
     setErrors((p) => ({ ...p, [k]: validate(values)[k] }));
   }
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const found = validate(values);
-    setErrors(found);
-    setTouched({ name: true, phone: true, email: true, message: true, interest: true });
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault();
 
-    const first = (["name", "phone", "email", "message"] as const).find((k) => found[k]);
-    if (first) {
-      formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
-      return;
+  const found = validate(values);
+  setErrors(found);
+
+  setTouched({
+    name: true,
+    phone: true,
+    email: true,
+    message: true,
+    interest: true,
+  });
+
+  const first = (["name", "phone", "email", "message"] as const)
+    .find((k) => found[k]);
+
+  if (first) {
+    formRef.current
+      ?.querySelector<HTMLElement>(`[name="${first}"]`)
+      ?.focus();
+    return;
+  }
+
+  try {
+    setLoading(true);
+    setSent(false);
+    setServerError("");
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/send`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: values.name.trim(),
+          phone: values.phone.trim(),
+          email: values.email.trim(),
+          interest: values.interest,
+          message: values.message.trim(),
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to send enquiry.");
     }
 
-    const body = [
-      `Name: ${values.name.trim()}`,
-      `Phone: ${values.phone.trim()}`,
-      `Email: ${values.email.trim() || "-"}`,
-      `Interested in: ${values.interest}`,
-      "",
-      values.message.trim(),
-    ].join("\n");
-
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(
-      `Enquiry: ${values.interest}`
-    )}&body=${encodeURIComponent(body)}`;
     setSent(true);
     setValues(EMPTY);
     setTouched({});
     setErrors({});
+
+  } catch (error) {
+    console.error("Contact form error:", error);
+
+    setServerError(
+      error instanceof Error
+        ? error.message
+        : "Something went wrong. Please try again."
+    );
+
+  } finally {
+    setLoading(false);
   }
+}
 
   const err = (k: keyof Values) =>
     errors[k] ? (
@@ -191,26 +234,29 @@ export default function ContactForm({ email }: { email: string }) {
       </label>
 
       <button
-        type="submit"
-        className="rounded-full bg-[#081F4D] px-8 py-4 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(8,31,77,0.25)] transition hover:bg-[#0A2660] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#081F4D]"
-      >
-        Submit enquiry
-      </button>
+  type="submit"
+  disabled={loading}
+  className="rounded-full bg-[#081F4D] px-8 py-4 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(8,31,77,0.25)] transition hover:bg-[#0A2660] disabled:cursor-not-allowed disabled:opacity-60"
+>
+  {loading ? "Sending..." : "Submit enquiry"}
+</button>
+{serverError && (
+  <p role="alert" className="text-sm text-red-600">
+    {serverError}
+  </p>
+)}
 
       <AnimatePresence>
-        {sent && (
-          <motion.p
-            role="status"
-            initial={reduce ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-[#081F4D]"
-          >
-            Thank you. Your email app should open with the enquiry filled in.
-            Press send there to complete it.
-          </motion.p>
-        )}
+       {sent && (
+  <motion.p
+    role="status"
+    initial={reduce ? false : { opacity: 0, y: 8 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-[#081F4D]"
+  >
+    Thank you! Your enquiry has been sent successfully.
+  </motion.p>
+)}
       </AnimatePresence>
     </form>
   );
