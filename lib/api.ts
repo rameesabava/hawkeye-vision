@@ -1,5 +1,16 @@
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://hawkeye-backend-9e82.onrender.com";
+function resolveApiBaseUrl(): string {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (!envUrl) return "https://hawkeye-backend-9e82.onrender.com";
+
+  if (envUrl.includes("||")) {
+    const parts = envUrl.split("||").map((s) => s.trim()).filter(Boolean);
+    return parts[0] || "https://hawkeye-backend-9e82.onrender.com";
+  }
+
+  return envUrl;
+}
+
+export const API_BASE_URL = resolveApiBaseUrl();
 
 const isTunnel = typeof API_BASE_URL === "string" && API_BASE_URL.includes("loca.lt");
 const TUNNEL_HEADER: Record<string, string> = isTunnel ? { "Bypass-Tunnel-Reminder": "true" } : {};

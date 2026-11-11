@@ -22,9 +22,10 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // 2. Customer authenticated routes (/cart, /orders, /profile)
+  // 2. Customer authenticated routes (/orders, /profile)
+  // Note: /cart is protected client-side via ProtectedRoute to ensure seamless
+  // transitions from 'Buy Now' and support localStorage auth state.
   if (
-    pathname.startsWith("/cart") ||
     pathname.startsWith("/orders") ||
     pathname.startsWith("/profile")
   ) {
@@ -49,7 +50,6 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/admin/:path*",
-    "/cart/:path*",
     "/orders/:path*",
     "/profile/:path*",
     "/login",

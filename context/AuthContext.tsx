@@ -65,12 +65,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(profile);
       setAuthCookies(savedToken, profile.role);
       await refreshCartCount();
-    } catch {
-      localStorage.removeItem("hawkeye_token");
-      clearAuthCookies();
-      setUser(null);
-      setToken(null);
-      setCartCount(0);
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message.toLowerCase() : "";
+      const isAuthError =
+        errorMsg.includes("invalid") ||
+        errorMsg.includes("expired") ||
+        errorMsg.includes("unauthorized") ||
+        errorMsg.includes("authorization token");
+
+      if (isAuthError) {
+        localStorage.removeItem("hawkeye_token");
+        clearAuthCookies();
+        setUser(null);
+        setToken(null);
+        setCartCount(0);
+      }
     }
   }, [token, refreshCartCount]);
 
@@ -78,6 +87,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const savedToken = localStorage.getItem("hawkeye_token");
     if (savedToken) {
       setToken(savedToken);
+      // Immediately ensure auth cookies exist so edge middleware has the token
+      setAuthCookies(savedToken, "user");
+
       api
         .getProfile(savedToken)
         .then((profile) => {
@@ -89,12 +101,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const count = items ? items.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0;
           setCartCount(count);
         })
-        .catch(() => {
-          localStorage.removeItem("hawkeye_token");
-          clearAuthCookies();
-          setUser(null);
-          setToken(null);
-          setCartCount(0);
+        .catch((err: unknown) => {
+          const errorMsg = err instanceof Error ? err.message.toLowerCase() : "";
+          const isAuthError =
+            errorMsg.includes("invalid") ||
+            errorMsg.includes("expired") ||
+            errorMsg.includes("unauthorized") ||
+            errorMsg.includes("authorization token");
+
+          if (isAuthError) {
+            localStorage.removeItem("hawkeye_token");
+            clearAuthCookies();
+            setUser(null);
+            setToken(null);
+            setCartCount(0);
+          } else {
+            console.warn("Could not reach backend to refresh profile, keeping session:", err);
+          }
         })
         .finally(() => {
           setLoading(false);

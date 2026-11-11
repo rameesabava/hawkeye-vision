@@ -24,7 +24,10 @@ export default function ProtectedRoute({
   useEffect(() => {
     if (loading) return;
 
-    if (!(token || typeof window !== "undefined" && localStorage.getItem("hawkeye_token")) || !user) {
+    const savedToken =
+      token || (typeof window !== "undefined" ? localStorage.getItem("hawkeye_token") : null);
+
+    if (!savedToken) {
       if (!redirectedRef.current) {
         redirectedRef.current = true;
         toast.error("Authentication required", {
@@ -36,7 +39,7 @@ export default function ProtectedRoute({
       return;
     }
 
-    if (allowedRoles && !allowedRoles.includes(user.role)) {
+    if (allowedRoles && user && !allowedRoles.includes(user.role)) {
       if (!redirectedRef.current) {
         redirectedRef.current = true;
         toast.error("Access Denied", {
@@ -49,13 +52,13 @@ export default function ProtectedRoute({
 
   if (loading) {
     return (
-      <div className="flex min-h-[70vh] flex-col items-center justify-center bg-neutral-950 px-4 text-white">
+      <div className="flex min-h-[70vh] flex-col items-center justify-center bg-slate-50 px-4 text-slate-900">
         <div className="flex flex-col items-center gap-4">
           <div className="relative h-10 w-10">
-            <div className="absolute inset-0 rounded-full border-2 border-neutral-700" />
-            <div className="absolute inset-0 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
+            <div className="absolute inset-0 rounded-full border-2 border-blue-200" />
+            <div className="absolute inset-0 animate-spin rounded-full border-2 border-[#081F4D] border-t-transparent" />
           </div>
-          <p className="text-xs font-semibold tracking-wider text-neutral-400 uppercase">
+          <p className="text-xs font-semibold tracking-wider text-slate-500 uppercase">
             Verifying security & access...
           </p>
         </div>
@@ -63,11 +66,14 @@ export default function ProtectedRoute({
     );
   }
 
-  if (!(token || typeof window !== "undefined" && localStorage.getItem("hawkeye_token")) || !user) {
+  const savedToken =
+    token || (typeof window !== "undefined" ? localStorage.getItem("hawkeye_token") : null);
+
+  if (!savedToken) {
     return null;
   }
 
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
+  if (allowedRoles && user && !allowedRoles.includes(user.role)) {
     return null;
   }
 

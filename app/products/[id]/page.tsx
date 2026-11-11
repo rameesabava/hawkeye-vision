@@ -16,13 +16,14 @@ export default function SingleProductPage({
 }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const { user, refreshCartCount } = useAuth();
+  const { user, token, refreshCartCount } = useAuth();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [buyingNow, setBuyingNow] = useState(false);
   const [addedToast, setAddedToast] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -60,10 +61,13 @@ export default function SingleProductPage({
     loadProduct();
   }, [resolvedParams.id]);
 
-  const handleAddToCart = async (redirect = false) => {
+  const handleAddToCart = async () => {
     if (!product) return;
 
-    if (!user) {
+    const savedToken =
+      token || (typeof window !== "undefined" ? localStorage.getItem("hawkeye_token") : null);
+
+    if (!user && !savedToken) {
       toast.error("Please log in to add items to your cart", {
         description: "You must be signed in to purchase products.",
         action: {
@@ -76,25 +80,52 @@ export default function SingleProductPage({
 
     try {
       setAddingToCart(true);
-      await api.addToCart(product.id, quantity);
+      await api.addToCart(product.id, quantity, savedToken || undefined);
       await refreshCartCount();
 
-      if (redirect) {
-        toast.success(`"${product.name}" added to cart successfully!`);
-        router.push("/cart");
-      } else {
-        toast.success(`"${product.name}" added to cart successfully! (Qty: ${quantity})`, {
-          action: {
-            label: "View Cart",
-            onClick: () => router.push("/cart"),
-          },
-        });
-      }
+      toast.success(`"${product.name}" added to cart successfully! (Qty: ${quantity})`, {
+        action: {
+          label: "View Cart",
+          onClick: () => router.push("/cart"),
+        },
+      });
     } catch (err: unknown) {
       const error = err as Error;
       toast.error(error.message || "Failed to add product to cart. Please try again.");
     } finally {
       setAddingToCart(false);
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!product) return;
+
+    const savedToken =
+      token || (typeof window !== "undefined" ? localStorage.getItem("hawkeye_token") : null);
+
+    if (!user && !savedToken) {
+      toast.error("Please log in to complete your purchase", {
+        description: "You must be signed in to purchase products.",
+        action: {
+          label: "Login",
+          onClick: () => router.push(`/login?redirect=/products/${product.id}`),
+        },
+      });
+      router.push(`/login?redirect=/products/${product.id}`);
+      return;
+    }
+
+    try {
+      setBuyingNow(true);
+      await api.addToCart(product.id, quantity, savedToken || undefined);
+      await refreshCartCount();
+      toast.success(`Proceeding to checkout for "${product.name}"...`);
+      router.push("/cart?checkout=true");
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || "Failed to proceed to checkout. Please try again.");
+    } finally {
+      setBuyingNow(false);
     }
   };
 
@@ -332,9 +363,9 @@ export default function SingleProductPage({
               {/* Add to Cart Button */}
               <button
                 type="button"
-                onClick={() => handleAddToCart(false)}
-                disabled={addingToCart}
-                className="flex-1 rounded-full border-2 border-[#081F4D] bg-white px-8 py-3.5 text-center text-sm font-bold text-[#081F4D] transition hover:bg-blue-50 shadow-sm"
+                onClick={handleAddToCart}
+                disabled={addingToCart || buyingNow}
+                className="flex-1 rounded-full border-2 border-[#081F4D] bg-white px-8 py-3.5 text-center text-sm font-bold text-[#081F4D] transition hover:bg-blue-50 shadow-sm disabled:opacity-60"
               >
                 {addingToCart ? "Adding..." : "Add to Cart"}
               </button>
@@ -342,11 +373,11 @@ export default function SingleProductPage({
               {/* Buy Now Button */}
               <button
                 type="button"
-                onClick={() => handleAddToCart(true)}
-                disabled={addingToCart}
-                className="flex-1 rounded-full bg-[#081F4D] px-8 py-3.5 text-center text-sm font-bold text-white transition hover:bg-[#0A2660] shadow-md"
+                onClick={handleBuyNow}
+                disabled={addingToCart || buyingNow}
+                className="flex-1 rounded-full bg-[#081F4D] px-8 py-3.5 text-center text-sm font-bold text-white transition hover:bg-[#0A2660] shadow-md disabled:opacity-60"
               >
-                Buy Now
+                {buyingNow ? "Proceeding..." : "Buy Now"}
               </button>
             </div>
           </div>

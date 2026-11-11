@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { api, CartItem, getImageUrl, OrderItem } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
@@ -11,6 +11,8 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 function CartContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const checkoutParam = searchParams.get("checkout");
   const { user, token, refreshCartCount } = useAuth();
   const authToken = token ?? undefined;
 
@@ -18,14 +20,22 @@ function CartContent() {
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<number | null>(null);
 
-  // Checkout state
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  // Checkout state: auto-open checkout form if navigated from "Buy Now" (?checkout=true)
+  const [isCheckingOut, setIsCheckingOut] = useState(
+    () => checkoutParam === "true" || checkoutParam === "1"
+  );
   const [shippingName, setShippingName] = useState("");
   const [shippingPhone, setShippingPhone] = useState("");
   const [shippingAddress, setShippingAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
   const [placingOrder, setPlacingOrder] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (checkoutParam === "true" || checkoutParam === "1") {
+      setIsCheckingOut(true);
+    }
+  }, [checkoutParam]);
 
   const fetchCart = useCallback(
     async (showSkeleton = true) => {
@@ -433,7 +443,18 @@ function CartContent() {
 export default function CartPage() {
   return (
     <ProtectedRoute>
-      <CartContent />
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-slate-50 px-4 pt-32 pb-24 text-slate-900 sm:pt-40">
+            <div className="mx-auto max-w-5xl animate-pulse space-y-6">
+              <div className="h-8 w-48 rounded bg-blue-100" />
+              <div className="h-40 rounded-3xl bg-white border border-blue-100" />
+            </div>
+          </div>
+        }
+      >
+        <CartContent />
+      </Suspense>
     </ProtectedRoute>
   );
 }
