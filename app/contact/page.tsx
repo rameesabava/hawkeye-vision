@@ -11,7 +11,7 @@ const PHONES = [
   { label: "889 1457 889", href: "tel:+918891457889" },
   { label: "858 9997 889", href: "tel:+918589997889" },
 ];
-const EMAIL = "hawkeyevisioncok@gmail.com"; // change when the domain email is ready
+const EMAIL = "hawkeyevisioncok@gmail.com"; 
 const MAP_SRC =
   "https://www.google.com/maps?q=DD+Trade+Centre,+MG+Road,+Jos+Junction,+Ernakulam&output=embed";
 
@@ -172,7 +172,7 @@ export default function ContactPage() {
             <p className="mt-3 text-slate-600">
               Include the brand, model and quantity if you know them.
             </p>
-            <ContactForm email={EMAIL} />
+            <ContactForm />
           </div>
         </div>
       </section>
