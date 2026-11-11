@@ -178,7 +178,7 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-2 border-t border-white/15 pt-6 text-sm text-blue-200/60 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Hawkeye Vision. All rights reserved.</p>
+          <p>© 2026 Empire AE IT Services. All rights reserved.</p>
           <p>Wholesale CCTV and surveillance systems, Kochi</p>
         </div>
       </div>
