@@ -12,7 +12,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 function CartContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const checkoutParam = searchParams.get("checkout");
+  const checkoutParam = searchParams?.get("checkout");
   const { user, token, refreshCartCount } = useAuth();
   const authToken = token ?? undefined;
 

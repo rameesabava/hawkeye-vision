@@ -15,8 +15,8 @@ export const dynamic = "force-dynamic";
 function OrdersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isSuccess = searchParams.get("success");
-  const tabParam = searchParams.get("tab");
+  const isSuccess = searchParams?.get("success");
+  const tabParam = searchParams?.get("tab");
 
   const { user, token } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);

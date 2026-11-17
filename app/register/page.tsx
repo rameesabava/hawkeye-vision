@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/";
+  const redirect = searchParams?.get("redirect") || "/";
 
   const { register, login, user, loading: authLoading } = useAuth();
   const [username, setUsername] = useState("");

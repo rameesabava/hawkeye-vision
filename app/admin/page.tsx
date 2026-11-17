@@ -54,7 +54,7 @@ function AdminDashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const tabParam = searchParams.get("tab");
+  const tabParam = searchParams?.get("tab");
 
   const { user, token, loading: authLoading } = useAuth();
 

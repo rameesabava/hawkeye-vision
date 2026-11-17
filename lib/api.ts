@@ -4,10 +4,10 @@ function resolveApiBaseUrl(): string {
 
   if (envUrl.includes("||")) {
     const parts = envUrl.split("||").map((s) => s.trim()).filter(Boolean);
-    return parts[0] || "https://hawkeye-backend-9e82.onrender.com";
+    return (parts[0] || "https://hawkeye-backend-9e82.onrender.com").replace(/\/$/, "");
   }
 
-  return envUrl;
+  return envUrl.replace(/\/$/, "");
 }
 
 export const API_BASE_URL = resolveApiBaseUrl();
@@ -16,8 +16,12 @@ const isTunnel = typeof API_BASE_URL === "string" && API_BASE_URL.includes("loca
 const TUNNEL_HEADER: Record<string, string> = isTunnel ? { "Bypass-Tunnel-Reminder": "true" } : {};
 
 export function getImageUrl(imagePath?: string | null): string {
-  if (!imagePath) return "/products/recorders.jpg";
-  if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+  if (!imagePath) return "/products/accessories.png";
+  if (
+    imagePath.startsWith("http://") ||
+    imagePath.startsWith("https://") ||
+    imagePath.startsWith("data:")
+  ) {
     return imagePath;
   }
   if (imagePath.startsWith("/uploads/")) {
@@ -210,7 +214,12 @@ export const api = {
 
   // Products
   async getAllProducts(params?: { search?: string; category?: string; brand?: string }) {
-    const url = new URL(`${API_BASE_URL}/products`);
+    const base = API_BASE_URL.startsWith("http")
+      ? API_BASE_URL
+      : (typeof window !== "undefined"
+          ? `${window.location.origin}${API_BASE_URL}`
+          : `http://localhost:3000${API_BASE_URL}`);
+    const url = new URL(`${base}/products`);
     if (params?.search) url.searchParams.set("search", params.search);
     if (params?.category && params.category !== "All")
       url.searchParams.set("category", params.category);

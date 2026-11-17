@@ -33,7 +33,7 @@ export default function ProtectedRoute({
         toast.error("Authentication required", {
           description: "Please sign in to access this page.",
         });
-        const target = `${redirectTo}?redirect=${encodeURIComponent(pathname)}`;
+        const target = `${redirectTo}?redirect=${encodeURIComponent(pathname || "/")}`;
         router.replace(target);
       }
       return;

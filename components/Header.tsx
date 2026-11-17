@@ -29,7 +29,7 @@ const { user, token, cartCount, logout, loading: authLoading } = useAuth();
   }, [pathname]);
 
   const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+    href === "/" ? pathname === "/" : Boolean(pathname?.startsWith(href));
 
  const handleCartClick = (e: React.MouseEvent) => {
   if (authLoading) {
